@@ -9,7 +9,7 @@ package Entidades;
  *
  * @author aleja
  */
-public class Transition {
+public class TransitionAFD{
     
     String initialState;
     String symbol;
@@ -27,9 +27,9 @@ public class Transition {
         return nextState;
     }
 
-    public Transition(String initialState, String symbol, String nextState) {
-        this.initialState = initialState;
-        this.symbol = symbol;
-        this.nextState = nextState;
+    public TransitionAFD(String transition[]) {
+        this.initialState = transition[0];
+        this.symbol = transition[1];
+        this.nextState = transition[2];
     }
 }
