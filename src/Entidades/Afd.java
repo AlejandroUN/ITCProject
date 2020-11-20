@@ -54,18 +54,7 @@ public class Afd {
             }
         }
         return true;
-    }
-    
-    public static String getNormalString(String s){
-        String realString = "";
-        for(int i = 0; i < s.length(); i++){
-            if(s.charAt(i) != ' '){
-                System.out.println(s.charAt(i));
-                realString += s.charAt(i);
-            }
-        }
-        return realString;
-    }
+    }    
     
     public boolean isEmpty(){
       return true;  
