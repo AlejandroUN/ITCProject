@@ -33,18 +33,36 @@ public class Afd {
     private  ArrayList<String> states = new ArrayList<String>();
     private static String initialState = "";
     private static ArrayList<String> acceptanceStates = new ArrayList<String>();
-    private static ArrayList<TransitionAFD> transitions = new ArrayList<TransitionAFD>();
+    private static ArrayList<TransitionAFD> transitions = new ArrayList<TransitionAFD>();    
 
-    //public Afd(String[] alfabeto, String[] states, String initialState, String[] acceptanceStates, Transition[] transitions) {
-//        this.alfabeto = alfabeto;
-//        this.states = states;
-//        this.initialState = initialState;
-//        this.acceptanceStates = acceptanceStates;
-//        this.transitions = transitions;
-//    }
+    public Afd(ArrayList<String> alfabeto, ArrayList<String> states, String initialState, ArrayList<String> acceptanceStates, ArrayList<TransitionAFD> transitions) {
+        this.alfabeto = alfabeto;
+        this.states = states;
+        this.initialState = initialState;
+        this.acceptanceStates = acceptanceStates;
+        this.transitions = transitions;
+    }
     
     public Afd(String nombreArchivo) {
         setAtributesGivenAFile(nombreArchivo);
+    }
+    
+    public void addToAlphabetFromARange(String range){
+        if(((int)range.charAt(0) >= 48) && ((int)range.charAt(0) <= 57)){
+            for(int i = Character.getNumericValue(range.charAt(0)); i < Character.getNumericValue(range.charAt(2)) ; i++){                
+                alfabeto.add(Integer.toString(i));
+            }
+        }else if(((int)range.charAt(0) >= 65) && ((int)range.charAt(0) <= 90)){
+            for(int j = (int)range.charAt(0); j < (int)range.charAt(2)+1 ; j++){                
+                String symbol = Character.toString((char)j);                
+                alfabeto.add(symbol);
+            }
+        }else if(((int)range.charAt(0) >= 97) && ((int)range.charAt(0) <= 122)){
+            for(int k = Character.getNumericValue((int)range.charAt(0)); k < Character.getNumericValue((int)range.charAt(2)) +1; k++){                
+                String symbol = Character.toString((char)k);                
+                alfabeto.add(symbol);
+            }
+        }
     }
     
     public boolean personalContain(String s1, String s2){
@@ -80,7 +98,7 @@ public class Afd {
                     curSection = "#transitions";                    
                 }else if(personalContain(curSection,"#alphabet") && curLine.length()!=0){                    
                     if(curLine.length()!=1){
-                        
+                        addToAlphabetFromARange(curLine);
                     }else{                        
                         alfabeto.add(curLine);
                     }
@@ -131,44 +149,55 @@ public class Afd {
         return false;
     }
 
-    public String procesarCadenaConDetalles(String cadena) {
+    public boolean procesarCadenaConDetalles(String cadena) {
+        boolean state = false;
         String currentState = initialState;
         String currentString = cadena;
         String process = "(" + currentState + "," + cadena + ")";                
         for (int i = 0; i < cadena.length(); i++) {            
             process += "->(";
             currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
-            currentString = currentString.substring(i+1);
+            if(currentString.length() != 1){
+                currentString = currentString.substring(1);
+            }else{
+                currentString = "";
+            }            
             if(!currentString.equals("")){                
                 process += currentState + "," + currentString + ")";
             }else{
                 process += currentState + ",$)";
-            }            
-            
+            }             
         }
         process += ">>";
         for (int j = 0; j < acceptanceStates.size(); j++) {
             if (currentState.equals(acceptanceStates.get(j))) {
                 process += "accepted";
+                state = true;
             }else{
                 process += "rejected";
+                state = false;
             }
         }
-        return process;
+        System.out.println(process);
+        return state;
     }   
     
-    public String procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla) {
+    public void procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla) {
         String process = "";
         for(int j = 0; j < listaCadenas.length; j++){
             String currentState = initialState;
             String cadena = listaCadenas[j];
             String currentString = cadena;
-            process += cadena + "\n";
+            process += "Cadena: " + cadena + "\t";
             process += "(" + currentState + "," + cadena + ")";
             for (int i = 0; i < cadena.length(); i++) {
                 process += "->(";
                 currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
-                currentString = currentString.substring(i + 1);
+                if (currentString.length() != 1) {
+                    currentString = currentString.substring(1);
+                } else {
+                    currentString = "";
+                }
                 if (!currentString.equals("")) {
                     process += currentState + "," + currentString + ")";
                 } else {
@@ -177,24 +206,33 @@ public class Afd {
             }
             process += ">>";
             for (int k = 0; k < acceptanceStates.size(); k++) {
-                if (currentState.equals(acceptanceStates.get(j))) {
-                    process += "accepted";
+                if (currentState.equals(acceptanceStates.get(k))) {
+                    process += "accepted\t yes";                    
                 } else {
-                    process += "rejected";
+                    process += "rejected\t no";                    
                 }
-            }  
-            process += "End of the process \n";
+            }
+            process += "\n";
         }        
         try {
-            FileWriter myWriter = new FileWriter(nombreArchivo + ".dfa");
-            myWriter.write(process);            
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            if(nombreArchivo.contains(" ")){
+                FileWriter myWriter = new FileWriter("default.dfa");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }else{
+                FileWriter myWriter = new FileWriter(nombreArchivo + ".dfa");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        return process;
+        if(imprimirPantalla){
+            System.out.println(process);
+        }        
     }   
         
     
@@ -216,25 +254,40 @@ public class Afd {
 
     public ArrayList<TransitionAFD> getTransitions() {
         return transitions;
-    }    
-    
-    public static void procesarListaCadenas(String cadena){
-
-    }        
+    }            
 
     @Override
     public String toString() {
-        return "Afd{" + "alfabeto=" + alfabeto + ", states=" + states + ", initialState=" + initialState + ", acceptanceStates=" + acceptanceStates + ", transitions=" + transitions + '}';
-    }   
-    
-    public static File changeExtension(File f, String newExtension) {
-  int i = f.getName().lastIndexOf('.');
-  String name = f.getName().substring(0,i);
-  return new File(f.getParent(), name + newExtension);
-}  
+        String afd = "#alphabet\n";
+        for(int i = 0; i < alfabeto.size(); i++){
+            afd += alfabeto.get(i) + "\n";
+        }
+        afd += "#states\n";
+        for(int i = 0; i < states.size(); i++){
+            afd += states.get(i) + "\n";
+        }
+        afd += "#initial\n";
+        afd += initialState + "\n";
+        afd += "#accepting\n";
+        for(int i = 0; i < acceptanceStates.size(); i++){
+            afd += acceptanceStates.get(i) + "\n";
+        }
+        afd += "#transitions\n";
+        for(int i = 0; i < transitions.size(); i++){
+            TransitionAFD transition = transitions.get(i);
+            afd += transition.getInitialState() + ":" + transition.getSymbol() + ">" + transition.getNextState() + "\n";
+        }
+        return afd;
+    }          
 
     public static void main(String[] args){      
         Afd afd = new Afd("afdd");
+        String[] cadenas = {"Cd","ABC","ABCd"};
+        System.out.println(afd.procesarCadena("Cd"));
         System.out.println(afd.procesarCadena("ABC"));
+        System.out.println(afd.procesarCadenaConDetalles("ABC"));
+        afd.procesarListaCadenas(cadenas,"EsteEsElOriginalNombreDelArchivo",true);
+        System.out.println(afd.toString());
+        
     }
 }
