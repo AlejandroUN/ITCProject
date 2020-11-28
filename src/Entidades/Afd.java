@@ -29,14 +29,14 @@ import java.util.logging.Logger;
  */
 public class Afd {
     
-    private  ArrayList<String> alfabeto = new ArrayList<String>();
+    private  ArrayList<String> setSigma = new ArrayList<String>();
     private  ArrayList<String> states = new ArrayList<String>();
     private static String initialState = "";
     private static ArrayList<String> acceptanceStates = new ArrayList<String>();
     private static ArrayList<TransitionAFD> transitions = new ArrayList<TransitionAFD>();    
 
-    public Afd(ArrayList<String> alfabeto, ArrayList<String> states, String initialState, ArrayList<String> acceptanceStates, ArrayList<TransitionAFD> transitions) {
-        this.alfabeto = alfabeto;
+    public Afd(ArrayList<String> setSigma, ArrayList<String> states, String initialState, ArrayList<String> acceptanceStates, ArrayList<TransitionAFD> transitions) {
+        this.setSigma = setSigma;
         this.states = states;
         this.initialState = initialState;
         this.acceptanceStates = acceptanceStates;
@@ -50,17 +50,17 @@ public class Afd {
     public void addToAlphabetFromARange(String range){
         if(((int)range.charAt(0) >= 48) && ((int)range.charAt(0) <= 57)){
             for(int i = Character.getNumericValue(range.charAt(0)); i < Character.getNumericValue(range.charAt(2)) ; i++){                
-                alfabeto.add(Integer.toString(i));
+                setSigma.add(Integer.toString(i));
             }
         }else if(((int)range.charAt(0) >= 65) && ((int)range.charAt(0) <= 90)){
             for(int j = (int)range.charAt(0); j < (int)range.charAt(2)+1 ; j++){                
                 String symbol = Character.toString((char)j);                
-                alfabeto.add(symbol);
+                setSigma.add(symbol);
             }
         }else if(((int)range.charAt(0) >= 97) && ((int)range.charAt(0) <= 122)){
             for(int k = Character.getNumericValue((int)range.charAt(0)); k < Character.getNumericValue((int)range.charAt(2)) +1; k++){                
                 String symbol = Character.toString((char)k);                
-                alfabeto.add(symbol);
+                setSigma.add(symbol);
             }
         }
     }
@@ -100,7 +100,7 @@ public class Afd {
                     if(curLine.length()!=1){
                         addToAlphabetFromARange(curLine);
                     }else{                        
-                        alfabeto.add(curLine);
+                        setSigma.add(curLine);
                     }
                 }else if(personalContain(curSection,"#states") && curLine.length()!=0){                      
                     states.add(curLine);
@@ -236,8 +236,8 @@ public class Afd {
     }   
         
     
-    public ArrayList<String> getAlfabeto() {
-        return alfabeto;
+    public ArrayList<String> getSigma() {
+        return setSigma;
     }
 
     public ArrayList<String> getStates() {
@@ -259,8 +259,8 @@ public class Afd {
     @Override
     public String toString() {
         String afd = "#alphabet\n";
-        for(int i = 0; i < alfabeto.size(); i++){
-            afd += alfabeto.get(i) + "\n";
+        for(int i = 0; i < setSigma.size(); i++){
+            afd += setSigma.get(i) + "\n";
         }
         afd += "#states\n";
         for(int i = 0; i < states.size(); i++){
