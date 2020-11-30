@@ -2,7 +2,7 @@ package Entidades;
 
 import java.util.ArrayList;
 
-public class AFP extends AF{
+public class AFP extends AF{ // Super class af with stack
     
     public ArrayList<String> Sigma; // Alfabeto de cinta
     public ArrayList<String> Gamma; // Alfabeto de pila

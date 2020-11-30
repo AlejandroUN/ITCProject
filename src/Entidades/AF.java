@@ -2,7 +2,8 @@ package Entidades;
 
 import java.util.ArrayList;
 
-public class AF {
+public class AF { // Super class AF
+    
     public ArrayList<String> Q; // Conjunto de estados
     public String q0; // Estado inicial
     public ArrayList<String> F; // Conjunto de estados de aceptación

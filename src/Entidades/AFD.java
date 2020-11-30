@@ -18,10 +18,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author aleja
- */
 public class AFD extends AF {
     
     private  ArrayList<String> Sigma = new ArrayList<String>();
