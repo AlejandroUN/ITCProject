@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class AF { // Super class AF
     
-    public ArrayList<String> Q; // Conjunto de estados
-    public String q0; // Estado inicial
-    public ArrayList<String> F; // Conjunto de estados de aceptación
+    public ArrayList<String> Q = new ArrayList<String>(); // Conjunto de estados
+    public String q0 = ""; // Estado inicial
+    public ArrayList<String> F = new ArrayList<String>(); // Conjunto de estados de aceptación
    
     public AF(ArrayList<String> Q, String q0, ArrayList<String> F){
         this.Q = Q;
