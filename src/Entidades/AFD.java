@@ -45,8 +45,8 @@ public class AFD extends AF {
                 Sigma.add(symbol);
             }
         }else if(((int)range.charAt(0) >= 97) && ((int)range.charAt(0) <= 122)){
-            for(int k = Character.getNumericValue((int)range.charAt(0)); k < Character.getNumericValue((int)range.charAt(2)) +1; k++){                
-                String symbol = Character.toString((char)k);                
+            for(int j = (int)range.charAt(0); j < (int)range.charAt(2)+1 ; j++){                
+                String symbol = Character.toString((char)j);                
                 Sigma.add(symbol);
             }
         }

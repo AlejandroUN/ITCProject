@@ -364,7 +364,7 @@ public class MT extends AF{
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
             }else{
-                FileWriter myWriter = new FileWriter(nombreArchivo + ".dfa");
+                FileWriter myWriter = new FileWriter(nombreArchivo + ".tm");
                 myWriter.write(process);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
