@@ -2,19 +2,18 @@ package Entidades;
 
 import java.util.ArrayList;
 
-public class AF { // Super class AF
+/**
+ * Super class for turing machines
+ */
+public class MT {
     
     public ArrayList<String> Q; // Conjunto de estados
     public String q0; // Estado inicial
     public ArrayList<String> F; // Conjunto de estados de aceptación
-   
-    public AF(ArrayList<String> Q, String q0, ArrayList<String> F){
-        this.Q = Q;
-        this.q0 = q0;
-        this.F = F;
-    }
+    public ArrayList<String> Sigma; // Alfabeto de cinta
+    public ArrayList<String> Gamma; // Alfabeto de pila
     
-    public AF(){}
+    public MT(){}
     
     public ArrayList<String> getQ(){
         return Q;
@@ -39,4 +38,21 @@ public class AF { // Super class AF
     public void setF(ArrayList<String> F){
         this.F = F;
     }
+    
+    public ArrayList<String> getSigma(){
+        return Sigma;
+    }
+    
+    public void setSigma(ArrayList<String> Sigma){
+        this.Sigma = Sigma;
+    }
+    
+    public ArrayList<String> getGamma(){
+        return Gamma;
+    }
+    
+    public void setGamma(ArrayList<String> Gamma){
+        this.Gamma = Gamma;
+    }
+    
 }

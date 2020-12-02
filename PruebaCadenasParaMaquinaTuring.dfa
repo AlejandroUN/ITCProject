@@ -1,3 +1,0 @@
-Cadena: Cd	(q1)Cd->D(q0)d->DE(otro_estado)accepted	 yes
-Cadena: ABC	(q1)ABC->B(q0)BC->BC(q1)C->BCD(q0)rejected	 no
-Cadena: ABCd	(q1)ABCd->B(q0)BCd->BC(q1)Cd->BCD(q0)d->BCDE(otro_estado)accepted	 yes
