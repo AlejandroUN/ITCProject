@@ -4,26 +4,18 @@ public class TransitionAFP {
 
     private String q0;
     private char character;
-    private String symbol;
-    private String nextState;
     private String[] finalStates;
 
     public TransitionAFP() {
-        this.q0 = null;
-        this.character = '0';
-        this.finalStates = null;
+        this.q0 = null;     //Estado Inicial
+        this.character = '0';   //Caracter con el que cambia
+        this.finalStates = null;    //Estados Finales []
     }
     
-    public TransitionAFP(String q0, char character, String[] finalState) {
+    public TransitionAFP(String q0, char character, String[] finalStates) {
         this.q0 = q0;
         this.character = character;
         this.finalStates = finalStates;
-    }
-    
-    public TransitionAFP(String q0, String symbol, String nextState) {
-        this.q0 = q0;
-        this.symbol = symbol;
-        this.nextState = nextState;
     }
 
     public String getq0() {

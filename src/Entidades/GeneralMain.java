@@ -14,7 +14,7 @@ public class GeneralMain {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         
         // AFD
-        
+        /*
         AFD afd = new AFD("afdd");
         String[] cadenas = {"Cd","ABC","ABCd"};
         System.out.println(afd.procesarCadena("Cd"));
@@ -22,7 +22,7 @@ public class GeneralMain {
         System.out.println(afd.procesarCadenaConDetalles("ABC"));
         afd.procesarListaCadenas(cadenas,"EsteEsElOriginalNombreDelArchivo",true);
         System.out.println(afd.toString());
-        
+        */
         // AFPN
         
         ArrayList<String> alfabeto = new ArrayList<>();
@@ -31,7 +31,7 @@ public class GeneralMain {
         ArrayList<String> pila = new ArrayList<>();
         pila.add("A");
         pila.add("B");
-        String cadena = "aabbaa";             //CADENA,   bbab     aabaaba
+        String cadena = "abb";             //CADENA,   bbab     aabaaba
 
         ArrayList<String> estados = new ArrayList<>();
         estados.add("q0");

@@ -1,16 +1,16 @@
 package Entidades;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
-public class AFPN extends AFP{
+public class AFPN extends AFP {
 
     private ArrayList<TransitionAFP> Delta;
     private ArrayList<String> Stack;
     private ArrayList<String> recorridos = new ArrayList<>();
 
-    public AFPN(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<TransitionAFP> Delta, ArrayList<String> Stack){
+    //          (Estados,   estado Inicial, estados Aceptacion, Alfabeto, Alfabeto Pila, Transiciones, pila)
+    public AFPN(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<TransitionAFP> Delta, ArrayList<String> Stack) {
         super(Q, q0, F, Sigma, Gamma);
         this.Delta = Delta;
         this.Stack = Stack;
@@ -18,8 +18,7 @@ public class AFPN extends AFP{
 
     public String[] getNextState(String estadoActual, char caracter) {
         for (TransitionAFP transicion : Delta) {
-            if (transicion.getFinalStates().equals(estadoActual) && transicion.getCharacter() == caracter) {
-//                return transicion.getEstadosFinales()[0];        //Retornar estados finales
+            if (transicion.getq0().equals(estadoActual) && transicion.getCharacter() == caracter) {
                 return transicion.getFinalStates();        //Retornar estados finales
             }
         }
@@ -47,7 +46,6 @@ public class AFPN extends AFP{
         String cadenaAlterna = cadena;
 //        System.out.print("(" + estadoActual + "," + cadena + ")");
         recorridos.add("(" + estadoActual + "," + cadena + ")");
-        
         try {
             estadoActual = getNextState(estadoActual, cadenaAlterna.charAt(0))[new Random().nextInt(getNextState(estadoActual, cadenaAlterna.charAt(0)).length)];
         } catch (NullPointerException nu) {
@@ -72,7 +70,7 @@ public class AFPN extends AFP{
     }
 
     public boolean procesarCadena(String cadena) {
-        
+
         String actualState = q0;
         for (int i = 0; i < cadena.length(); i++) {
             actualState = getNextState(actualState, cadena.charAt(i))[0];
@@ -86,7 +84,7 @@ public class AFPN extends AFP{
     }
 
     public int procesarCadenaConDetalles(String cadena) {   //Falta añadir que si no es Aceptada imprima todos los procesamientos fallidos
-        return 0;   
+        return 0;
     }
 
     public int computarTodosLosProcesamientos(String cadena, String nombreArchivo) {
@@ -117,5 +115,5 @@ public class AFPN extends AFP{
     public void setRecorridos(ArrayList<String> recorridos) {
         this.recorridos = recorridos;
     }
-    
+
 }
