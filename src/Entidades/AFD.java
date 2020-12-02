@@ -59,13 +59,9 @@ public class AFD extends AF {
             }
         }
         return true;
-    }    
+    }       
     
-    public boolean isEmpty(){
-      return true;  
-    }
-    
-    public boolean setAtributesGivenAFile(String nombreArchivo) {
+    public boolean setAtributesGivenAFile(String nombreArchivo) {        
         boolean state = false;
         String curSection = "WTF";
         String fileName = nombreArchivo + ".dfa";
@@ -116,14 +112,18 @@ public class AFD extends AF {
     
     public String getNextState(String  currentState, String symbol){
         for(int i = 0; i < Delta.size(); i++){
-            if(Delta.get(i).getInitialState().equalsIgnoreCase(currentState) && Delta.get(i).getSymbol().equalsIgnoreCase(symbol)){
+            if(Delta.get(i).getInitialState().equals(currentState) && Delta.get(i).getSymbol().equals(symbol)){
                 return Delta.get(i).getNextState();
             }
         }
         return "";
     }    
     
-    public boolean procesarCadena(String cadena) {
+    public boolean procesarCadena(String cadena) {        
+        char[] aux = cadena.toCharArray();
+        for(int i = 0; i < aux.length; i++){
+            if(!Sigma.contains(String.valueOf(cadena.charAt(i)))) return false;
+        }
         String currentState = q0;        
         for (int i = 0; i < cadena.length(); i++) {
             currentState = getNextState(currentState, String.valueOf(cadena.charAt(i)));
@@ -137,6 +137,10 @@ public class AFD extends AF {
     }
 
     public boolean procesarCadenaConDetalles(String cadena) {
+        char[] aux = cadena.toCharArray();
+        for(int i = 0; i < aux.length; i++){
+            if(!Sigma.contains(String.valueOf(cadena.charAt(i)))) return false;
+        }
         boolean state = false;
         String currentState = q0;
         String currentString = cadena;
@@ -261,6 +265,5 @@ public class AFD extends AF {
             afd += transition.getInitialState() + ":" + transition.getSymbol() + ">" + transition.getNextState() + "\n";
         }
         return afd;
-    }          
-
+    }      
 }
