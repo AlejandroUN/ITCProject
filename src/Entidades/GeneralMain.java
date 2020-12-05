@@ -32,7 +32,7 @@ public class GeneralMain {
         gama.add("A");
         gama.add("B");
         
-        String cadena = "ababa";             //CADENA,   bbab     aabaaba
+        String cadena = "abababa";             //CADENA
 
         ArrayList<String> estados = new ArrayList<>();
         estados.add("q0");
@@ -48,7 +48,8 @@ public class GeneralMain {
         transiciones.add(new TransitionAFPN("q0", 'b', '$', new String[]{"q0"}, 'A'));
 
         AFPN A1 = new AFPN(estados, estadoInicial, estadosAceptacion, alfabeto, gama, transiciones);
-        System.out.println(A1.procesarCadena(cadena));
-//        System.out.println(A1.computarTodosLosProcesamientos(cadena));
+//        System.out.println(A1.procesarCadena(cadena));
+//        System.out.println(A1.procesarCadenaConDetalles(cadena));
+//        System.out.println(A1.computarTodosLosProcesamientos(cadena,"nombreArchivo"));
     }
 }

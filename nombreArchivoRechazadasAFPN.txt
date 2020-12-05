@@ -1,0 +1,12 @@
+Cadena: abab
+Procesamiento 1: 	(q0,abab,$)->(q0,abab,$)>>rejected
+Procesamiento 2: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)>>rejected
+Procesamiento 3: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)>>rejected
+Procesamiento 4: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,$)>>rejected
+Procesamiento 5: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)->(q0,b,ABA)>>rejected
+Procesamiento 6: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)->(q0,b,A)->(q0,$,BA)>>rejected
+Procesamiento 7: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,$)->(q0,b,A)->(q0,$,BA)>>rejected
+Procesamiento 8: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)->(q0,b,ABA)->(q0,$,BABA)>>rejected
+Procesamiento 9: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,$)->(q0,b,A)>>rejected
+Procesamiento 10: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)->(q0,b,A)>>rejected
+Procesamiento 11: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)->(q0,b,ABA)->(q0,$,BA)>>rejected
