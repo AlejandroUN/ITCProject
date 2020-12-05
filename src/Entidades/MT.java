@@ -433,6 +433,35 @@ public class MT extends AF{
     public void setF(ArrayList<String> F) {
         this.F = F;
     }        
+
+    @Override
+    public String toString() {
+        String afd = "#inputAlphabet\n";
+        for(int i = 0; i < Sigma.size(); i++){
+            afd += Sigma.get(i) + "\n";
+        }
+        afd += "#tapeAlphabet\n";
+        for(int i = 0; i < Gamma.size(); i++){
+            afd += Gamma.get(i) + "\n";
+        }
+        afd += "#states\n";
+        for(int i = 0; i < Q.size(); i++){
+            afd += Q.get(i) + "\n";
+        }
+        afd += "#initial\n";
+        afd += q0 + "\n";
+        afd += "#accepting\n";
+        for(int i = 0; i < F.size(); i++){
+            afd += F.get(i) + "\n";
+        }
+        afd += "#transitions\n";
+        for(int i = 0; i < Delta.size(); i++){
+            TransitionMT transition = Delta.get(i);
+            afd += transition.getInitialState() + ":" + transition.getSymbol() + "?" + transition.getNextState()  
+                    + ":" + transition.getNextSymbol() + ":" + transition.getDisplacement() +"\n";
+        }
+        return afd;
+    }
     
     public static void main(String[] args){
         MT mt = new MT("MaquinaDeTuring");

@@ -171,17 +171,61 @@ public class AFD extends AF {
         }
         System.out.println(process);
         return state;
-    }   
+    }  
+    
+    public String procesarCadenaConDetallesString(String cadena) {
+        char[] aux = cadena.toCharArray();
+        for(int i = 0; i < aux.length; i++){
+            if(!Sigma.contains(String.valueOf(cadena.charAt(i)))) return "Uno de los caracteres no está en el alfabeto";
+        }
+        boolean state = false;
+        String currentState = q0;
+        String currentString = cadena;
+        String process = "(" + currentState + "," + cadena + ")";                
+        for (int i = 0; i < cadena.length(); i++) {            
+            process += "->(";
+            currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
+            if(currentString.length() != 1){
+                currentString = currentString.substring(1);
+            }else{
+                currentString = "";
+            }            
+            if(!currentString.equals("")){                
+                process += currentState + "," + currentString + ")";
+            }else{
+                process += currentState + ",$)";
+            }             
+        }
+        process += ">>";
+        for (int j = 0; j < F.size(); j++) {
+            if (currentState.equals(F.get(j))) {
+                process += "accepted";
+                state = true;
+            }else{
+                process += "rejected";
+                state = false;
+            }
+        }        
+        return process;
+    } 
     
     public void procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla) {
-        String process = "";
-        for(int j = 0; j < listaCadenas.length; j++){
+        String process = "";        
+        for(int j = 0; j < listaCadenas.length; j++){            
             String currentState = q0;
             String cadena = listaCadenas[j];
+            char[] aux = cadena.toCharArray();            
             String currentString = cadena;
             process += "Cadena: " + cadena + "\t";
             process += "(" + currentState + "," + cadena + ")";
+            outerloop:
             for (int i = 0; i < cadena.length(); i++) {
+                for (int k = 0; k < aux.length; k++) {
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(k)))) {
+                        process += " Uno de los caracteres no está en el alfabeto";
+                    }
+                    break outerloop;
+                }
                 process += "->(";
                 currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
                 if (currentString.length() != 1) {
@@ -195,8 +239,15 @@ public class AFD extends AF {
                     process += currentState + ",$)";
                 }
             }
-            process += ">>";
+            process += ">>";            
+            outerterloop:
             for (int k = 0; k < F.size(); k++) {
+                for (int l = 0; l < aux.length; l++) {
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(l)))) {
+                        process += "rejected\t no";  
+                        break outerterloop;
+                    }                    
+                }
                 if (currentState.equals(F.get(k))) {
                     process += "accepted\t yes";                    
                 } else {
@@ -224,7 +275,73 @@ public class AFD extends AF {
         if(imprimirPantalla){
             System.out.println(process);
         }        
-    }   
+    } 
+    
+    public String procesarListaCadenasString(String[] listaCadenas, String nombreArchivo) {
+        String process = "";        
+        for(int j = 0; j < listaCadenas.length; j++){            
+            String currentState = q0;
+            String cadena = listaCadenas[j];
+            char[] aux = cadena.toCharArray();            
+            String currentString = cadena;
+            process += "Cadena: " + cadena + "\t";
+            process += "(" + currentState + "," + cadena + ")";
+            outerloop:
+            for (int i = 0; i < cadena.length(); i++) {
+                for (int k = 0; k < aux.length; k++) {
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(k)))) {
+                        process += "Uno de los caracteres no está en el alfabeto \n";
+                    }
+                    break outerloop;
+                }
+                process += "->(";
+                currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
+                if (currentString.length() != 1) {
+                    currentString = currentString.substring(1);
+                } else {
+                    currentString = "";
+                }
+                if (!currentString.equals("")) {
+                    process += currentState + "," + currentString + ")";
+                } else {
+                    process += currentState + ",$)";
+                }
+            }
+            process += ">>";
+            outerterloop:
+            for (int k = 0; k < F.size(); k++) {
+                for (int l = 0; l < aux.length; l++) {
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(l)))) {
+                        process += "rejected\t no";  
+                        break outerterloop;
+                    }                    
+                }
+                if (currentState.equals(F.get(k))) {
+                    process += "accepted\t yes";                    
+                } else {
+                    process += "rejected\t no";                    
+                }
+            }
+            process += "\n";
+        }        
+        try {
+            if(nombreArchivo.contains(" ")){
+                FileWriter myWriter = new FileWriter("default.dfa");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }else{
+                FileWriter myWriter = new FileWriter(nombreArchivo + ".dfa");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return process;
+    }
         
     
     public ArrayList<String> getSigma() {

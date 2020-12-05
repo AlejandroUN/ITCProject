@@ -1,0 +1,4 @@
+Cadena: Cd	(q1,Cd)>>accepted	 yes
+Cadena: ABC	(q1,ABC)>>accepted	 yes
+Cadena: abc	(q1,abc)Uno de los caracteres no está en el alfabeto 
+>>accepted	 yes
