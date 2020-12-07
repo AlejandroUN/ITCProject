@@ -1,6 +1,13 @@
 package Entidades;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MTMC extends AF{
     private ArrayList<String> Q;
@@ -18,6 +25,96 @@ public class MTMC extends AF{
         this.Sigma = Sigma;
         this.Gamma = Gamma;
         this.Delta = Delta;
+    }
+    
+    public MTMC(String fileName) throws IOException{
+        super();
+        try {
+            setAtributesByFile(fileName);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AFPD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void addToAlphabetFromARange(String range, ArrayList<String> alphabet){
+        if(((int)range.charAt(0) >= 48) && ((int)range.charAt(0) <= 57)){
+            for(int i = Character.getNumericValue(range.charAt(0)); i < Character.getNumericValue(range.charAt(2)) ; i++){                
+                alphabet.add(Integer.toString(i));
+            }
+        }else if(((int)range.charAt(0) >= 65) && ((int)range.charAt(0) <= 90)){
+            for(int j = (int)range.charAt(0); j < (int)range.charAt(2)+1 ; j++){                
+                String symbol = Character.toString((char)j);                
+                alphabet.add(symbol);
+            }
+        }else if(((int)range.charAt(0) >= 97) && ((int)range.charAt(0) <= 122)){
+            for(int j = (int)range.charAt(0); j < (int)range.charAt(2)+1 ; j++){                
+                String symbol = Character.toString((char)j);                
+                alphabet.add(symbol);
+            }
+        }
+    }
+    
+    public boolean contain(String s1, String s2){
+        for(int i = 0; i < s2.length(); i++){
+            if(!s1.contains(Character.toString(s2.charAt(i)))){
+                return false;
+            }
+        }
+        return true;
+    }    
+    
+    public void setAtributesByFile(String fileName) throws FileNotFoundException, IOException{
+        boolean reader = false;
+        String name = fileName + ".dfa";
+        String aux = "";
+        String line = "";
+        try {
+            BufferedReader rd = new BufferedReader(new FileReader(new File(name)));
+            while(rd.readLine() != null){
+                line = rd.readLine();
+                if(contain(line, "#states")){
+                    aux = "#states";
+                } else if(contain(aux, "#states") && (line.length() != 0)) {
+                    Q.add(line);
+                } else if(contain(line, "#initial")){
+                    aux = "#initial";
+                } else if(contain(aux, "#initial") && (line.length() != 0)){
+                    q0 = line;
+                } else if(contain(line, "#accepting")){
+                    aux = "#accepting";
+                } else if(contain(aux, "#accepting") && (line.length() != 0)) {
+                    F.add(line);
+                }else if(contain(line, "#transitions")){
+                    aux = "#transitions";
+                } else if(contain(line, "#transitions") && (line.length() != 0)){
+                    String initialState = line.split(":")[0];
+                    String symbol = line.split(":")[1].split(">")[0];
+                    String nextState = line.split(":")[1].split(">")[1];
+                    String[] transition = null;                
+                    Delta.add(transition);  
+                } else if(contain(line, "#alphabetC")){
+                    aux = "#alphabetC";
+                } else if(contain(line, "#alphabetC")){
+                    if(line.length() != 1){
+                        addToAlphabetFromARange(line, Sigma);
+                    } else {
+                        Sigma.add(line);
+                    }
+                } else if(contain(line, "#alphabetP")){
+                    aux = "#alphabetP";
+                } else if(contain(line, "#alphabetP")){
+                    if(line.length() != 1){
+                        addToAlphabetFromARange(line, Gamma);
+                    } else {
+                        Gamma.add(line);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("An error has ocurred");
+        } catch (IOException ex){
+            Logger.getLogger(AFPD.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public boolean procesarCadena(String cadena){
@@ -243,5 +340,6 @@ public class MTMC extends AF{
         }
         return mt;
     }
+
 }
 
