@@ -463,16 +463,5 @@ public class MT extends AF{
         return mt;
     }
     
-    public static void main(String[] args){
-        MT mt = new MT("MaquinaDeTuring");
-        String[] cadenas = {"abb","abbb","abba"};
-        System.out.println(mt.procesarCadena(cadenas[0]));
-        System.out.println(mt.procesarCadena(cadenas[1]));
-        System.out.println(mt.procesarCadenaConDetalles(cadenas[0]));
-        System.out.println(mt.procesarCadenaConDetalles(cadenas[1]));
-        System.out.println(mt.procesarCadenaConDetalles(cadenas[2]));
-        mt.procesarListaCadenas(cadenas,"PruebaCadenasParaMaquinaTuring",true);
-
-    }
 }
 
