@@ -275,7 +275,119 @@ public class MT extends AF{
         process = process.substring(0, process.length()-2);
         System.out.println(process);
         return isAnAcceptanceState(currentState);  
-    }   
+    } 
+    
+    public String procesarCadenaConDetallesString(String cadena) {
+        boolean sigmaContainsStringCharacters = true;
+        String currentState = q0;   
+        String nextState = "";
+        String desplacement = "";
+        String process = "(" + currentState + ")" + cadena + "->";
+        int currentStringIndex = 0;
+        while (((currentStringIndex) <= cadena.length()) && !isAnAcceptanceState(currentState)
+                && sigmaContainsStringCharacters) {
+            char[] aux = cadena.toCharArray();
+            for (int i = 0; i < aux.length; i++) {
+                if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                    sigmaContainsStringCharacters = false;
+                    break;
+                }
+            }
+            if (currentStringIndex < 0) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = "!" + cadena;
+            } else if (!((currentStringIndex) <= cadena.length() - 1)) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = cadena + "!";
+            } else {
+                if (!transitionExists(currentState, String.valueOf(cadena.charAt(currentStringIndex)))) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[0];
+                desplacement = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2];
+                cadena = replaceChar(cadena, getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[1].charAt(0), currentStringIndex);
+            }
+            if (personalContain(desplacement, ">")) {
+                currentStringIndex++;
+            } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
+                currentStringIndex--;
+            }
+            currentState = nextState;
+            if (currentStringIndex < 0) {
+                process += "!(" + currentState + ")" + cadena + "->";
+            } else if (currentStringIndex > cadena.length() - 1) {
+                process += cadena + "(" + currentState + ")!" + "->";
+            } else {
+                process += cadena.substring(0, currentStringIndex) + "(" + currentState + ")" + cadena.substring(currentStringIndex) + "->";
+            }
+        }
+        process = process.substring(0, process.length()-2);        
+        return process;  
+    } 
+    
+    public String procesarFuncion(String cadena) {
+        boolean sigmaContainsStringCharacters = true;
+        String currentState = q0;   
+        String nextState = "";
+        String desplacement = "";
+        String process = "(" + currentState + ")" + cadena + "->";
+        int currentStringIndex = 0;
+        while (((currentStringIndex) <= cadena.length()) && !isAnAcceptanceState(currentState)
+                && sigmaContainsStringCharacters) {
+            char[] aux = cadena.toCharArray();
+            for (int i = 0; i < aux.length; i++) {
+                if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                    sigmaContainsStringCharacters = false;
+                    break;
+                }
+            }
+            if (currentStringIndex < 0) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = "!" + cadena;
+            } else if (!((currentStringIndex) <= cadena.length() - 1)) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = cadena + "!";
+            } else {
+                if (!transitionExists(currentState, String.valueOf(cadena.charAt(currentStringIndex)))) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[0];
+                desplacement = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2];
+                cadena = replaceChar(cadena, getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[1].charAt(0), currentStringIndex);
+            }
+            if (personalContain(desplacement, ">")) {
+                currentStringIndex++;
+            } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
+                currentStringIndex--;
+            }
+            currentState = nextState;
+            if (currentStringIndex < 0) {
+                process += "!(" + currentState + ")" + cadena + "->";
+            } else if (currentStringIndex > cadena.length() - 1) {
+                process += cadena + "(" + currentState + ")!" + "->";
+            } else {
+                process += cadena.substring(0, currentStringIndex) + "(" + currentState + ")" + cadena.substring(currentStringIndex) + "->";
+            }
+        }
+        process = process.substring(0, process.length()-2);        
+        return cadena;  
+    } 
     
     public void procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla) {
         String process = "";
@@ -378,6 +490,105 @@ public class MT extends AF{
         }        
     }
     
+    public String procesarListaCadenasString(String[] listaCadenas, String nombreArchivo) {
+        String process = "";
+        for(int j = 0; j < listaCadenas.length; j++){
+            boolean sigmaContainsStringCharacters = true;
+            String currentState = q0;
+            String cadena = listaCadenas[j];
+            String currentString = cadena;
+            String nextState = "";
+            String desplacement = "";
+            process += "Cadena: " + cadena + "\t";
+            process += "(" + currentState + ")" + cadena + "->";
+            int currentStringIndex = 0;
+            for (int i = 0; i < listaCadenas[0].length(); i++) {                
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {                        
+                        sigmaContainsStringCharacters = false;
+                        break;
+                    }
+                }
+            while (((currentStringIndex) <= cadena.length()) && !isAnAcceptanceState(currentState) 
+                    && sigmaContainsStringCharacters) {
+                char[] aux = cadena.toCharArray();
+                for (int i = 0; i < aux.length; i++) {
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                        sigmaContainsStringCharacters = false;
+                        break;
+                    }
+                }
+                if(currentStringIndex < 0){
+                    if(!transitionExists(currentState, "!")){
+                        break;
+                    }
+                    nextState = getNextStepGivenATransition(currentState, "!")[0];
+                    desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                    cadena = "!" + cadena;
+                }else if(!((currentStringIndex) <= cadena.length()-1)){
+                    if(!transitionExists(currentState,"!")){
+                        break;
+                    }
+                    nextState = getNextStepGivenATransition(currentState, "!")[0];
+                    desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                    cadena = cadena + "!";
+                }else{
+                    if(!transitionExists(currentState, String.valueOf(cadena.charAt(currentStringIndex)))){
+                        break;
+                    }
+                    nextState = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[0];
+                    desplacement = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2];
+                    cadena = replaceChar(cadena, getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[1].charAt(0), currentStringIndex);
+                }                 
+                if (personalContain(desplacement, ">")) {
+                    currentStringIndex++;
+                } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
+                    currentStringIndex--;
+                }
+                currentState = nextState;
+                if(currentStringIndex < 0){
+                    process += "!(" + currentState + ")" + cadena+ "->";
+                }else if(currentStringIndex > cadena.length() - 1){
+                    process += cadena + "(" + currentState + ")!" + "->";
+                }else{
+                    process += cadena.substring(0, currentStringIndex) + "(" + currentState + ")" + cadena.substring(currentStringIndex) + "->";
+                }                  
+            }
+            process = process.substring(0, process.length() - 2);
+            for (int k = 0; k < F.size(); k++) {
+                if(sigmaContainsStringCharacters){
+                    if (currentState.equals(F.get(k))) {
+                        process += "\taccepted\t yes";
+                        break;
+                    } else {
+                        process += "\trejected\t no";
+                        break;
+                    }
+                }else{   
+                    process += "\trejected\t no";
+                    break;
+                }                
+            }
+            process += "\n";
+        }        
+        try {
+            if(nombreArchivo.contains(" ")){
+                FileWriter myWriter = new FileWriter("default.dfa");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }else{
+                FileWriter myWriter = new FileWriter(nombreArchivo + ".tm");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }        
+        return process;               
+    }
+    
     public ArrayList<String> getSigma() {
         return Sigma;
     }
@@ -463,16 +674,20 @@ public class MT extends AF{
         return afd;
     }
     
-    public static void main(String[] args){
-        MT mt = new MT("MaquinaDeTuring");
-        String[] cadenas = {"abb","abbb","abba"};
-        System.out.println(mt.procesarCadena(cadenas[0]));
-        System.out.println(mt.procesarCadena(cadenas[1]));
-        System.out.println(mt.procesarCadenaConDetalles(cadenas[0]));
-        System.out.println(mt.procesarCadenaConDetalles(cadenas[1]));
-        System.out.println(mt.procesarCadenaConDetalles(cadenas[2]));
-        mt.procesarListaCadenas(cadenas,"PruebaCadenasParaMaquinaTuring",true);
-
-    }
+    
+    
+//    public static void main(String[] args){
+//        MT mt = new MT("MaquinaDeTuring");
+//        String[] cadenas = {"abb","abbb","abba"};
+//        System.out.println(mt.procesarCadena(cadenas[0]));
+//        System.out.println(mt.procesarCadena(cadenas[1]));
+//        System.out.println(mt.procesarFuncion(cadenas[0]));
+//        System.out.println(mt.procesarFuncion(cadenas[1]));
+//        System.out.println(mt.procesarCadenaConDetalles(cadenas[0]));
+//        System.out.println(mt.procesarCadenaConDetalles(cadenas[1]));
+//        System.out.println(mt.procesarCadenaConDetalles(cadenas[2]));
+//        mt.procesarListaCadenas(cadenas,"PruebaCadenasParaMaquinaTuring",true);
+//
+//    }
 }
 
