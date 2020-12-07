@@ -1,11 +1,15 @@
 package Entidades;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +22,13 @@ public class MT extends AF{
     public ArrayList<String> Sigma = new ArrayList<String>(); // Alfabeto de cinta
     public ArrayList<String> Gamma = new ArrayList<String>(); // Alfabeto de pila  
     public ArrayList<TransitionMT> Delta = new ArrayList<TransitionMT>(); 
-    public String tape = "";    //cinta       
+    public String tape = "";    //cinta   
+
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data"  + File.separator + "MT" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);    
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data"  + File.separator + "MT" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath);    
 
     public MT(ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<TransitionMT> Delta) {
         super(Q, q0, F);
@@ -85,8 +95,8 @@ public class MT extends AF{
         String curSection = "WTF";
         String fileName = nombreArchivo + ".tm";
         String curLine = "";                    
-        try {                              
-            BufferedReader myReader=new BufferedReader(new FileReader(new File(fileName)));            
+        try {                 
+            BufferedReader myReader=new BufferedReader(new FileReader(new File(rPath + File.separator +fileName)));            
             while ((curLine = myReader.readLine()) != null) {                 
                 if(personalContain(curLine,"#inputAlphabet")){               
                     curSection = "#inputAlphabet";                    
@@ -469,16 +479,17 @@ public class MT extends AF{
             }
             process += "\n";
         }        
-        try {
-            if(nombreArchivo.contains(" ")){
-                FileWriter myWriter = new FileWriter("default.dfa");
+        try {                            
+            if (nombreArchivo.contains(" ")) {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + "default.tm");
                 myWriter.write(process);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
-            }else{
-                FileWriter myWriter = new FileWriter(nombreArchivo + ".tm");
-                myWriter.write(process);
-                myWriter.close();
+            } else {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + nombreArchivo + ".tm");
+                BufferedWriter bfwriter = new BufferedWriter(myWriter);
+                bfwriter.write(process);
+                bfwriter.close();
                 System.out.println("Successfully wrote to the file.");
             }
         } catch (IOException e) {
@@ -570,22 +581,23 @@ public class MT extends AF{
             }
             process += "\n";
         }        
-        try {
-            if(nombreArchivo.contains(" ")){
-                FileWriter myWriter = new FileWriter("default.dfa");
+        try {                            
+            if (nombreArchivo.contains(" ")) {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + "default.tm");
                 myWriter.write(process);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
-            }else{
-                FileWriter myWriter = new FileWriter(nombreArchivo + ".tm");
-                myWriter.write(process);
-                myWriter.close();
+            } else {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + nombreArchivo + ".tm");
+                BufferedWriter bfwriter = new BufferedWriter(myWriter);
+                bfwriter.write(process);
+                bfwriter.close();
                 System.out.println("Successfully wrote to the file.");
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }        
+        }     
         return process;               
     }
     
@@ -647,31 +659,31 @@ public class MT extends AF{
 
     @Override
     public String toString() {
-        String afd = "#inputAlphabet\n";
+        String mt = "#inputAlphabet\n";
         for(int i = 0; i < Sigma.size(); i++){
-            afd += Sigma.get(i) + "\n";
+            mt += Sigma.get(i) + "\n";
         }
-        afd += "#tapeAlphabet\n";
+        mt += "#tapeAlphabet\n";
         for(int i = 0; i < Gamma.size(); i++){
-            afd += Gamma.get(i) + "\n";
+            mt += Gamma.get(i) + "\n";
         }
-        afd += "#states\n";
+        mt += "#states\n";
         for(int i = 0; i < Q.size(); i++){
-            afd += Q.get(i) + "\n";
+            mt += Q.get(i) + "\n";
         }
-        afd += "#initial\n";
-        afd += q0 + "\n";
-        afd += "#accepting\n";
+        mt += "#initial\n";
+        mt += q0 + "\n";
+        mt += "#accepting\n";
         for(int i = 0; i < F.size(); i++){
-            afd += F.get(i) + "\n";
+            mt += F.get(i) + "\n";
         }
-        afd += "#transitions\n";
+        mt += "#transitions\n";
         for(int i = 0; i < Delta.size(); i++){
             TransitionMT transition = Delta.get(i);
-            afd += transition.getInitialState() + ":" + transition.getSymbol() + "?" + transition.getNextState()  
+            mt += transition.getInitialState() + ":" + transition.getSymbol() + "?" + transition.getNextState()  
                     + ":" + transition.getNextSymbol() + ":" + transition.getDisplacement() +"\n";
         }
-        return afd;
+        return mt;
     }
     
     
