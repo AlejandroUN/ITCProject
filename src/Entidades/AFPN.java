@@ -1,15 +1,18 @@
 package Entidades;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Random;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AFPN extends AFP {
 
-    private ArrayList<TransitionAFPN> Delta;
-    private Stack<String> stack;
+    private ArrayList<TransitionAFPN> Delta = new ArrayList<>();
+    private Stack<String> stack = new Stack<>();
     private ArrayList<String> recorridos = new ArrayList<>();
 
     //          (Estados,   estado Inicial, estados Aceptacion, Alfabeto, Alfabeto Pila, Transiciones)
@@ -19,10 +22,15 @@ public class AFPN extends AFP {
         this.stack = new Stack<>();
     }
 
+    public AFPN(String nombreArchivo) {
+        super();
+        setAtributesGivenAFile(nombreArchivo);
+    }
+
     public TransitionAFPN getNextState(String estadoActual, char caracter) {
         int index = new Random().nextInt(this.Delta.size());
         TransitionAFPN transicion = this.Delta.get(index);
-        if (transicion.getq0().equals(estadoActual) && transicion.getCharacter() == caracter) {
+        if (transicion.getq0().equals(estadoActual) && (transicion.getCharacter() == caracter || transicion.getCharacter() == '$')) {
             if (transicion.getPilaOut() != '$' && transicion.getPilaIn() != '$' && !this.stack.isEmpty()) {  // A|B
                 if (getTopPila().equals(String.valueOf(transicion.getPilaOut()))) {
                     this.stack.pop();
@@ -151,15 +159,89 @@ public class AFPN extends AFP {
         return lista.size();
     }
 
+    public void addToAlphabetFromARange(String range) {
+        if (((int) range.charAt(0) >= 48) && ((int) range.charAt(0) <= 57)) {
+            for (int i = Character.getNumericValue(range.charAt(0)); i < Character.getNumericValue(range.charAt(2)); i++) {
+                Sigma.add(Integer.toString(i));
+            }
+        } else if (((int) range.charAt(0) >= 65) && ((int) range.charAt(0) <= 90)) {
+            for (int j = (int) range.charAt(0); j < (int) range.charAt(2) + 1; j++) {
+                Sigma.add(String.valueOf((char) j));
+            }
+        } else if (((int) range.charAt(0) >= 97) && ((int) range.charAt(0) <= 122)) {
+            for (int j = (int) range.charAt(0); j < (int) range.charAt(2) + 1; j++) {
+                Sigma.add(String.valueOf((char) j));
+            }
+        }
+    }
+
+    public boolean personalContain(String s1, String s2) {
+        for (int i = 0; i < s2.length(); i++) {
+            if (!s1.contains(Character.toString(s2.charAt(i)))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean setAtributesGivenAFile(String nombreArchivo) {
+        boolean state = false;
+        String curSection = "WTF";
+        String fileName = nombreArchivo;
+        String curLine = "";
+        try {
+            BufferedReader myReader = new BufferedReader(new FileReader(new File(fileName)));
+            while ((curLine = myReader.readLine()) != null) {
+                if (personalContain(curLine, "#alphabet")) {
+                    curSection = "#alphabet";
+                } else if (personalContain(curLine, "#states")) {
+                    curSection = "#states";
+                } else if (personalContain(curLine, "#initial")) {
+                    curSection = "#initial";
+                } else if (personalContain(curLine, "#accepting")) {
+                    curSection = "#accepting";
+                } else if (personalContain(curLine, "#transitions")) {
+                    curSection = "#transitions";
+                } else if (personalContain(curSection, "#alphabet") && curLine.length() != 0) {
+                    if (curLine.length() != 1) {
+                        addToAlphabetFromARange(curLine);
+                    } else {
+                        Sigma.add(curLine);
+                    }
+                } else if (personalContain(curSection, "#states") && curLine.length() != 0) {
+                    Q.add(curLine);
+                } else if (personalContain(curSection, "#initial") && curLine.length() != 0) {
+                    q0 = curLine;
+                } else if (personalContain(curSection, "#accepting") && curLine.length() != 0) {
+                    F.add(curLine);
+                } else if (personalContain(curSection, "#transitions") && curLine.length() != 0) {
+                    String initialState = curLine.split(":")[0];
+                    String symbol = curLine.split(":")[1].split(">")[0];
+                    char pilaIn = curLine.split(":")[2].charAt(0);
+                    for (int i = 0; i < curLine.split(">")[1].split(";").length; i++) {
+                        char PilaOut = curLine.split(">")[1].split(";")[i].charAt(3);
+                        String nexState = curLine.split(">")[1].split(";")[i].split(":")[0];
+                        this.Delta.add(new TransitionAFPN(initialState, symbol.charAt(0), pilaIn, nexState, PilaOut));
+                    }
+                }
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(AFD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return state;
+    }
+
     public boolean recorridoAFPN(String cadena, String state) {
         String estadoActual = state;
         String cadenaAlterna = cadena;
-//        System.out.print("(" + estadoActual + "," + cadena + ")");
         recorridos.add("(" + estadoActual + "," + cadena + "," + verPila() + ")");
         try {
             TransitionAFPN aux = getNextState(estadoActual, cadenaAlterna.charAt(0));
-            String[] s = aux.getFinalStates();
-            estadoActual = s[new Random().nextInt(s.length)];
+            estadoActual = aux.getFinalStates();
             if (aux.getPilaIn() != '$') {
                 this.stack.push(String.valueOf(aux.getPilaIn()));
             }
@@ -173,12 +255,10 @@ public class AFPN extends AFP {
             return recorridoAFPN(cadenaAlterna, estadoActual);
         }
         if (cadenaAlterna.length() == 1) {   //No ha mas cadena pa recorrer y estado Aceptacion
-//            System.out.print("(" + estadoActual + ",$)");
             recorridos.add("(" + estadoActual + ",$," + verPila() + ")");
             recorridos.add(String.valueOf(F.contains(estadoActual) && this.stack.isEmpty()));
             return F.contains(estadoActual) && this.stack.isEmpty();
         } else {
-//            System.out.println("Upps Error");
             recorridos.add("Upps Error");
             return false;
         }
@@ -242,11 +322,80 @@ public class AFPN extends AFP {
     }
 
     public void procesarListaCadenas(ArrayList<String> cadenas, String nombreArchivo, boolean imprimirPantalla) {
+        try {
+            nombreArchivo = URLEncoder.encode(nombreArchivo, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            nombreArchivo = "procesamientoAFPNDefault.pda";
+        }
         try (FileWriter fw = new FileWriter(nombreArchivo, false);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw)) {
+            boolean flag = false;
             for (String cadena : cadenas) {
                 out.print(cadena + "\t");
+                ArrayList<ArrayList<String>> lista = new ArrayList<>();
+
+                ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
+                ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
+
+                for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+                    recorridoAFPN(cadena, q0);
+                    if (!lista.contains(recorridos)) {
+                        lista.add(recorridos);
+                    }
+                    this.recorridos = new ArrayList<>();
+                    this.stack = new Stack<>();
+                }
+
+                for (int i = 0; i < lista.size(); i++) {
+                    for (int j = 1; j < lista.get(i).size(); j++) {
+                        if (lista.get(i).get(j).equals("false") || lista.get(i).get(j).equals("true")) {
+                            if (lista.get(i).get(j).equals("false")) {
+                                lista.get(i).set(j, "rejected");
+                                listaRechazo.add(lista.get(i));
+                            } else if (lista.get(i).get(j).equals("true")) {
+                                lista.get(i).set(j, "acepted");
+                                listaAceptacion.add(lista.get(i));
+                            }
+                        }
+                    }
+                }
+
+                if (!listaAceptacion.isEmpty()) {
+                    flag = true;
+                    for (int i = 0; i < listaAceptacion.size(); i++) {
+                        out.print(listaAceptacion.get(i).get(0));
+                        for (int j = 0; j < listaAceptacion.get(i).size(); j++) {
+                            if (listaAceptacion.get(i).get(j).equals("acepted")) {
+                                out.print(">>");
+                                out.print(listaAceptacion.get(i).get(j));
+                                break;
+                            }
+                            out.print("->" + listaAceptacion.get(i).get(j));
+                        }
+                        break;
+                    }
+                } else {
+                    for (int i = 0; i < listaRechazo.size(); i++) {
+                        out.print(listaRechazo.get(i).get(0));
+                        for (int j = 0; j < listaRechazo.get(i).size(); j++) {
+                            if (listaRechazo.get(i).get(j).equals("rejected")) {
+                                out.print(">>");
+                                out.print(listaRechazo.get(i).get(j));
+                                break;
+                            }
+                            out.print("->" + listaRechazo.get(i).get(j));
+                        }
+                        break;
+                    }
+                }
+                out.print("\t" + listaAceptacion.size() + "\t" + listaRechazo.size() + "\t");
+                if (flag) {
+                    out.print("yes");
+                } else {
+                    out.print("no");
+                }
+                out.println();
             }
         } catch (IOException e) {
             System.out.println("Error, problemas al crear el Documento" + nombreArchivo);

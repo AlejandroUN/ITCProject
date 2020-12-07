@@ -102,6 +102,7 @@ public class AFD extends AF {
                 String initialState = curLine.split(":")[0];
                 String symbol = curLine.split(":")[1].split(">")[0];
                 String nextState = curLine.split(":")[1].split(">")[1];
+                    System.out.println(curLine.split(":")[1]);
                 TransitionAFD transition = new TransitionAFD(initialState, symbol, nextState);                
                 Delta.add(transition);                
                 }                                                
