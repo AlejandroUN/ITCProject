@@ -183,5 +183,65 @@ public class MTMC extends AF{
             
         }
     }
+    
+    public ArrayList<String> getSigma() {
+        return Sigma;
+    }
+
+    public void setSigma(ArrayList<String> Sigma) {
+        this.Sigma = Sigma; 
+    }
+    
+    public ArrayList<String> getGamma() {
+        return Gamma;
+    }
+
+    public void setGamma(ArrayList<String> Gamma) {
+        this.Gamma = Gamma;
+    }
+    
+    public ArrayList<String[]> getDelta() {
+        return Delta;
+    }
+
+    public void setDelta(ArrayList<String[]> Delta) {
+        this.Delta = Delta;
+    }
+    
+    public String[] getCintas() {
+        return cintas;
+    }
+
+    public void setCintas(String[] cintas) {
+        this.cintas = cintas;
+    }
+
+    @Override
+    public String toString() {
+        String mt = "#inputAlphabet\n";
+        for(int i = 0; i < Sigma.size(); i++){
+            mt += Sigma.get(i) + "\n";
+        }
+        mt += "#tapeAlphabet\n";
+        for(int i = 0; i < Gamma.size(); i++){
+            mt += Gamma.get(i) + "\n";
+        }
+        mt += "#states\n";
+        for(int i = 0; i < Q.size(); i++){
+            mt += Q.get(i) + "\n";
+        }
+        mt += "#initial\n";
+        mt += q0 + "\n";
+        mt += "#accepting\n";
+        for(int i = 0; i < F.size(); i++){
+            mt += F.get(i) + "\n";
+        }
+        mt += "#transitions\n";
+        for(int i = 0; i < Delta.size(); i++){
+            String[] transition = Delta.get(i);
+            mt += transition[0] + ":" + transition[1] + "?" + transition[2] + ":" + transition[3] + ":" + transition[4] +"\n";
+        }
+        return mt;
+    }
 }
 

@@ -436,31 +436,31 @@ public class MT extends AF{
 
     @Override
     public String toString() {
-        String afd = "#inputAlphabet\n";
+        String mt = "#inputAlphabet\n";
         for(int i = 0; i < Sigma.size(); i++){
-            afd += Sigma.get(i) + "\n";
+            mt += Sigma.get(i) + "\n";
         }
-        afd += "#tapeAlphabet\n";
+        mt += "#tapeAlphabet\n";
         for(int i = 0; i < Gamma.size(); i++){
-            afd += Gamma.get(i) + "\n";
+            mt += Gamma.get(i) + "\n";
         }
-        afd += "#states\n";
+        mt += "#states\n";
         for(int i = 0; i < Q.size(); i++){
-            afd += Q.get(i) + "\n";
+            mt += Q.get(i) + "\n";
         }
-        afd += "#initial\n";
-        afd += q0 + "\n";
-        afd += "#accepting\n";
+        mt += "#initial\n";
+        mt += q0 + "\n";
+        mt += "#accepting\n";
         for(int i = 0; i < F.size(); i++){
-            afd += F.get(i) + "\n";
+            mt += F.get(i) + "\n";
         }
-        afd += "#transitions\n";
+        mt += "#transitions\n";
         for(int i = 0; i < Delta.size(); i++){
             TransitionMT transition = Delta.get(i);
-            afd += transition.getInitialState() + ":" + transition.getSymbol() + "?" + transition.getNextState()  
+            mt += transition.getInitialState() + ":" + transition.getSymbol() + "?" + transition.getNextState()  
                     + ":" + transition.getNextSymbol() + ":" + transition.getDisplacement() +"\n";
         }
-        return afd;
+        return mt;
     }
     
     public static void main(String[] args){
