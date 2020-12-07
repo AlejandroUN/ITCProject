@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class AFP extends AF{ // Super class af with stack
     
-    public ArrayList<String> Sigma; // Alfabeto de cinta
-    public ArrayList<String> Gamma; // Alfabeto de pila
+    public ArrayList<String> Sigma = new ArrayList<>(); // Alfabeto de cinta
+    public ArrayList<String> Gamma = new ArrayList<>(); // Alfabeto de pila
     
     public AFP(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma){
         super(Q, q0, F);
