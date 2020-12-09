@@ -56,12 +56,12 @@ public class TransitionMT {
     public void setDisplacement(String displacement) {
         this.displacement = displacement;
     }
-
+    
     public TransitionMT(String initialState, String symbol, String nextState, String nextSymbol, String displacement) {
         this.initialState = initialState;
         this.symbol = symbol;
         this.nextState = nextState;
         this.nextSymbol = nextSymbol;
         this.displacement = displacement;
-    }
+    }   
 }
