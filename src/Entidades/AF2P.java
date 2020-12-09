@@ -111,7 +111,7 @@ public class AF2P extends AFP {
 
     public String getTopStackB() {
         try {
-            return this.stackA.peek();
+            return this.stackB.peek();
         } catch (EmptyStackException e) {
             return "$";
         }
@@ -189,7 +189,7 @@ public class AF2P extends AFP {
     public boolean recorridoAF2P(String cadena, String state) {
         String estadoActual = state;
         String cadenaAlterna = cadena;
-        recorridos.add("(" + estadoActual + "," + cadena + "," + verPilaA() + ")");
+        recorridos.add("(" + estadoActual + "," + cadena + "," + verPilaA() + "," + verPilaB() + ")");
         try {
             TransitionAF2P aux = getNextState(estadoActual, cadenaAlterna.charAt(0));
             estadoActual = aux.getFinalStates();
@@ -209,8 +209,8 @@ public class AF2P extends AFP {
             return recorridoAF2P(cadenaAlterna, estadoActual);
         }
         if (cadenaAlterna.length() == 1) {   //No ha mas cadena pa recorrer y estado Aceptacion
-            recorridos.add("(" + estadoActual + ",$," + verPilaA() + ")");
-            recorridos.add(String.valueOf(F.contains(estadoActual) && this.stackA.isEmpty()));
+            recorridos.add("(" + estadoActual + ",$," + verPilaA() + "," + verPilaB() + ")");
+            recorridos.add(String.valueOf(F.contains(estadoActual) && this.stackA.isEmpty() && this.stackB.isEmpty()));
             return F.contains(estadoActual) && this.stackA.isEmpty();
         } else {
             recorridos.add("Upps Error");
@@ -596,25 +596,25 @@ public class AF2P extends AFP {
 
     @Override
     public String toString() {
-        String afd = "#alphabet\n";
+        String af2p = "#alphabet\n";
         for (int i = 0; i < Sigma.size(); i++) {
-            afd += Sigma.get(i) + "\n";
+            af2p += Sigma.get(i) + "\n";
         }
-        afd += "#states\n";
+        af2p += "#states\n";
         for (int i = 0; i < Q.size(); i++) {
-            afd += Q.get(i) + "\n";
+            af2p += Q.get(i) + "\n";
         }
-        afd += "#initial\n";
-        afd += q0 + "\n";
-        afd += "#accepting\n";
+        af2p += "#initial\n";
+        af2p += q0 + "\n";
+        af2p += "#accepting\n";
         for (int i = 0; i < F.size(); i++) {
-            afd += F.get(i) + "\n";
+            af2p += F.get(i) + "\n";
         }
-        afd += "#transitions\n";
+        af2p += "#transitions\n";
         for (int i = 0; i < Delta.size(); i++) {
             TransitionAF2P transition = Delta.get(i);
-            afd += transition.getq0() + ":" + transition.getCharacter() + ">" + transition.getFinalStates() + "\n";
+            af2p += transition.getq0() + ":" + transition.getCharacter() + ":" + transition.getPilaInA() + ":" + transition.getPilaInB() + ">" + transition.getFinalStates() + ":" + transition.getPilaOutA() + ":" + transition.getPilaOutB() + "\n";
         }
-        return afd;
+        return af2p;
     }
 }

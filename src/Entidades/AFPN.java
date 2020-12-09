@@ -541,25 +541,25 @@ public class AFPN extends AFP {
 
     @Override
     public String toString() {
-        String afd = "#alphabet\n";
+        String AFPN = "#alphabet\n";
         for (int i = 0; i < Sigma.size(); i++) {
-            afd += Sigma.get(i) + "\n";
+            AFPN += Sigma.get(i) + "\n";
         }
-        afd += "#states\n";
+        AFPN += "#states\n";
         for (int i = 0; i < Q.size(); i++) {
-            afd += Q.get(i) + "\n";
+            AFPN += Q.get(i) + "\n";
         }
-        afd += "#initial\n";
-        afd += q0 + "\n";
-        afd += "#accepting\n";
+        AFPN += "#initial\n";
+        AFPN += q0 + "\n";
+        AFPN += "#accepting\n";
         for (int i = 0; i < F.size(); i++) {
-            afd += F.get(i) + "\n";
+            AFPN += F.get(i) + "\n";
         }
-        afd += "#transitions\n";
+        AFPN += "#transitions\n";
         for (int i = 0; i < Delta.size(); i++) {
             TransitionAFPN transition = Delta.get(i);
-            afd += transition.getq0() + ":" + transition.getCharacter() + ">" + transition.getFinalStates() + "\n";
+            AFPN += transition.getq0() + ":" + transition.getCharacter() + ":" + transition.getPilaIn() + ">" + transition.getFinalStates() + ":" + transition.getPilaOut() + "\n";
         }
-        return afd;
+        return AFPN;
     }
 }
