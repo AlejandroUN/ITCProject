@@ -1,0 +1,3 @@
+Cadena: Cd	(q1,Cd)->(otro_estado,d)->(q1,$)>>accepted	 yes
+Cadena: ABC	(q1,ABC)->(otro_estado,BC)->(q1,C)->(otro_estado,$)>>rejected	 no
+Cadena: ABCd	(q1,ABCd)->(otro_estado,BCd)->(q1,Cd)->(otro_estado,d)->(q1,$)>>accepted	 yes

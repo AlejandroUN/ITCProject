@@ -1,11 +1,15 @@
 package Entidades;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +22,13 @@ public class MT extends AF{
     public ArrayList<String> Sigma = new ArrayList<String>(); // Alfabeto de cinta
     public ArrayList<String> Gamma = new ArrayList<String>(); // Alfabeto de pila  
     public ArrayList<TransitionMT> Delta = new ArrayList<TransitionMT>(); 
-    public String tape = "";    //cinta       
+    public String tape = "";    //cinta   
+
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data"  + File.separator + "MT" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);    
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data"  + File.separator + "MT" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath);    
 
     public MT(ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<TransitionMT> Delta) {
         super(Q, q0, F);
@@ -85,8 +95,8 @@ public class MT extends AF{
         String curSection = "WTF";
         String fileName = nombreArchivo + ".tm";
         String curLine = "";                    
-        try {                              
-            BufferedReader myReader=new BufferedReader(new FileReader(new File(fileName)));            
+        try {                 
+            BufferedReader myReader=new BufferedReader(new FileReader(new File(rPath + File.separator +fileName)));            
             while ((curLine = myReader.readLine()) != null) {                 
                 if(personalContain(curLine,"#inputAlphabet")){               
                     curSection = "#inputAlphabet";                    
@@ -275,7 +285,119 @@ public class MT extends AF{
         process = process.substring(0, process.length()-2);
         System.out.println(process);
         return isAnAcceptanceState(currentState);  
-    }   
+    } 
+    
+    public String procesarCadenaConDetallesString(String cadena) {
+        boolean sigmaContainsStringCharacters = true;
+        String currentState = q0;   
+        String nextState = "";
+        String desplacement = "";
+        String process = "(" + currentState + ")" + cadena + "->";
+        int currentStringIndex = 0;
+        while (((currentStringIndex) <= cadena.length()) && !isAnAcceptanceState(currentState)
+                && sigmaContainsStringCharacters) {
+            char[] aux = cadena.toCharArray();
+            for (int i = 0; i < aux.length; i++) {
+                if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                    sigmaContainsStringCharacters = false;
+                    break;
+                }
+            }
+            if (currentStringIndex < 0) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = "!" + cadena;
+            } else if (!((currentStringIndex) <= cadena.length() - 1)) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = cadena + "!";
+            } else {
+                if (!transitionExists(currentState, String.valueOf(cadena.charAt(currentStringIndex)))) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[0];
+                desplacement = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2];
+                cadena = replaceChar(cadena, getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[1].charAt(0), currentStringIndex);
+            }
+            if (personalContain(desplacement, ">")) {
+                currentStringIndex++;
+            } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
+                currentStringIndex--;
+            }
+            currentState = nextState;
+            if (currentStringIndex < 0) {
+                process += "!(" + currentState + ")" + cadena + "->";
+            } else if (currentStringIndex > cadena.length() - 1) {
+                process += cadena + "(" + currentState + ")!" + "->";
+            } else {
+                process += cadena.substring(0, currentStringIndex) + "(" + currentState + ")" + cadena.substring(currentStringIndex) + "->";
+            }
+        }
+        process = process.substring(0, process.length()-2);        
+        return process;  
+    } 
+    
+    public String procesarFuncion(String cadena) {
+        boolean sigmaContainsStringCharacters = true;
+        String currentState = q0;   
+        String nextState = "";
+        String desplacement = "";
+        String process = "(" + currentState + ")" + cadena + "->";
+        int currentStringIndex = 0;
+        while (((currentStringIndex) <= cadena.length()) && !isAnAcceptanceState(currentState)
+                && sigmaContainsStringCharacters) {
+            char[] aux = cadena.toCharArray();
+            for (int i = 0; i < aux.length; i++) {
+                if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                    sigmaContainsStringCharacters = false;
+                    break;
+                }
+            }
+            if (currentStringIndex < 0) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = "!" + cadena;
+            } else if (!((currentStringIndex) <= cadena.length() - 1)) {
+                if (!transitionExists(currentState, "!")) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, "!")[0];
+                desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                cadena = cadena + "!";
+            } else {
+                if (!transitionExists(currentState, String.valueOf(cadena.charAt(currentStringIndex)))) {
+                    break;
+                }
+                nextState = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[0];
+                desplacement = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2];
+                cadena = replaceChar(cadena, getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[1].charAt(0), currentStringIndex);
+            }
+            if (personalContain(desplacement, ">")) {
+                currentStringIndex++;
+            } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
+                currentStringIndex--;
+            }
+            currentState = nextState;
+            if (currentStringIndex < 0) {
+                process += "!(" + currentState + ")" + cadena + "->";
+            } else if (currentStringIndex > cadena.length() - 1) {
+                process += cadena + "(" + currentState + ")!" + "->";
+            } else {
+                process += cadena.substring(0, currentStringIndex) + "(" + currentState + ")" + cadena.substring(currentStringIndex) + "->";
+            }
+        }
+        process = process.substring(0, process.length()-2);        
+        return cadena;  
+    } 
     
     public void procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla) {
         String process = "";
@@ -357,16 +479,17 @@ public class MT extends AF{
             }
             process += "\n";
         }        
-        try {
-            if(nombreArchivo.contains(" ")){
-                FileWriter myWriter = new FileWriter("default.dfa");
+        try {                            
+            if (nombreArchivo.contains(" ")) {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + "default.tm");
                 myWriter.write(process);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
-            }else{
-                FileWriter myWriter = new FileWriter(nombreArchivo + ".tm");
-                myWriter.write(process);
-                myWriter.close();
+            } else {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + nombreArchivo + ".tm");
+                BufferedWriter bfwriter = new BufferedWriter(myWriter);
+                bfwriter.write(process);
+                bfwriter.close();
                 System.out.println("Successfully wrote to the file.");
             }
         } catch (IOException e) {
@@ -376,6 +499,106 @@ public class MT extends AF{
         if(imprimirPantalla){
             System.out.println(process);
         }        
+    }
+    
+    public String procesarListaCadenasString(String[] listaCadenas, String nombreArchivo) {
+        String process = "";
+        for(int j = 0; j < listaCadenas.length; j++){
+            boolean sigmaContainsStringCharacters = true;
+            String currentState = q0;
+            String cadena = listaCadenas[j];
+            String currentString = cadena;
+            String nextState = "";
+            String desplacement = "";
+            process += "Cadena: " + cadena + "\t";
+            process += "(" + currentState + ")" + cadena + "->";
+            int currentStringIndex = 0;
+            for (int i = 0; i < listaCadenas[0].length(); i++) {                
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {                        
+                        sigmaContainsStringCharacters = false;
+                        break;
+                    }
+                }
+            while (((currentStringIndex) <= cadena.length()) && !isAnAcceptanceState(currentState) 
+                    && sigmaContainsStringCharacters) {
+                char[] aux = cadena.toCharArray();
+                for (int i = 0; i < aux.length; i++) {
+                    if (!Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                        sigmaContainsStringCharacters = false;
+                        break;
+                    }
+                }
+                if(currentStringIndex < 0){
+                    if(!transitionExists(currentState, "!")){
+                        break;
+                    }
+                    nextState = getNextStepGivenATransition(currentState, "!")[0];
+                    desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                    cadena = "!" + cadena;
+                }else if(!((currentStringIndex) <= cadena.length()-1)){
+                    if(!transitionExists(currentState,"!")){
+                        break;
+                    }
+                    nextState = getNextStepGivenATransition(currentState, "!")[0];
+                    desplacement = getNextStepGivenATransition(currentState, "!")[2];
+                    cadena = cadena + "!";
+                }else{
+                    if(!transitionExists(currentState, String.valueOf(cadena.charAt(currentStringIndex)))){
+                        break;
+                    }
+                    nextState = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[0];
+                    desplacement = getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2];
+                    cadena = replaceChar(cadena, getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[1].charAt(0), currentStringIndex);
+                }                 
+                if (personalContain(desplacement, ">")) {
+                    currentStringIndex++;
+                } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
+                    currentStringIndex--;
+                }
+                currentState = nextState;
+                if(currentStringIndex < 0){
+                    process += "!(" + currentState + ")" + cadena+ "->";
+                }else if(currentStringIndex > cadena.length() - 1){
+                    process += cadena + "(" + currentState + ")!" + "->";
+                }else{
+                    process += cadena.substring(0, currentStringIndex) + "(" + currentState + ")" + cadena.substring(currentStringIndex) + "->";
+                }                  
+            }
+            process = process.substring(0, process.length() - 2);
+            for (int k = 0; k < F.size(); k++) {
+                if(sigmaContainsStringCharacters){
+                    if (currentState.equals(F.get(k))) {
+                        process += "\taccepted\t yes";
+                        break;
+                    } else {
+                        process += "\trejected\t no";
+                        break;
+                    }
+                }else{   
+                    process += "\trejected\t no";
+                    break;
+                }                
+            }
+            process += "\n";
+        }        
+        try {                            
+            if (nombreArchivo.contains(" ")) {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + "default.tm");
+                myWriter.write(process);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            } else {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + nombreArchivo + ".tm");
+                BufferedWriter bfwriter = new BufferedWriter(myWriter);
+                bfwriter.write(process);
+                bfwriter.close();
+                System.out.println("Successfully wrote to the file.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }     
+        return process;               
     }
     
     public ArrayList<String> getSigma() {
@@ -463,5 +686,20 @@ public class MT extends AF{
         return mt;
     }
     
+    
+    
+//    public static void main(String[] args){
+//        MT mt = new MT("MaquinaDeTuring");
+//        String[] cadenas = {"abb","abbb","abba"};
+//        System.out.println(mt.procesarCadena(cadenas[0]));
+//        System.out.println(mt.procesarCadena(cadenas[1]));
+//        System.out.println(mt.procesarFuncion(cadenas[0]));
+//        System.out.println(mt.procesarFuncion(cadenas[1]));
+//        System.out.println(mt.procesarCadenaConDetalles(cadenas[0]));
+//        System.out.println(mt.procesarCadenaConDetalles(cadenas[1]));
+//        System.out.println(mt.procesarCadenaConDetalles(cadenas[2]));
+//        mt.procesarListaCadenas(cadenas,"PruebaCadenasParaMaquinaTuring",true);
+//
+//    }
 }
 

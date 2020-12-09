@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class GeneralMain {
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+/*    public static void main(String[] args) throws FileNotFoundException, IOException {
         
         // AFD
         
@@ -62,4 +62,5 @@ public class GeneralMain {
         //AF2P
         AF2P A1 = new AF2P("AF2P.msm");
     }
+*/
 }

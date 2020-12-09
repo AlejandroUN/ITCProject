@@ -1,6 +1,7 @@
 package Entidades;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,7 +22,13 @@ import java.util.logging.Logger;
 public class AFD extends AF {
     
     private  ArrayList<String> Sigma = new ArrayList<String>();
-    private static ArrayList<TransitionAFD> Delta = new ArrayList<TransitionAFD>();    
+    private static ArrayList<TransitionAFD> Delta = new ArrayList<TransitionAFD>();  
+    
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFD" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);    
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFD" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath);  
 
     public AFD(ArrayList<String> Sigma, ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<TransitionAFD> Delta) {
         super(Q, q0, F);
@@ -67,7 +74,7 @@ public class AFD extends AF {
         String fileName = nombreArchivo + ".dfa";
         String curLine = "";                    
         try {                              
-            BufferedReader myReader=new BufferedReader(new FileReader(new File(fileName)));            
+            BufferedReader myReader=new BufferedReader(new FileReader(new File(rPath + File.separator + fileName)));            
             while ((curLine = myReader.readLine()) != null) {     
                 if(personalContain(curLine,"#alphabet")){               
                     curSection = "#alphabet";                    
@@ -224,8 +231,8 @@ public class AFD extends AF {
                 for (int k = 0; k < aux.length; k++) {
                     if (!Sigma.contains(String.valueOf(cadena.charAt(k)))) {
                         process += " Uno de los caracteres no está en el alfabeto";
-                    }
-                    break outerloop;
+                        break outerloop;
+                    }                    
                 }
                 process += "->(";
                 currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
@@ -257,29 +264,30 @@ public class AFD extends AF {
             }
             process += "\n";
         }        
-        try {
-            if(nombreArchivo.contains(" ")){
-                FileWriter myWriter = new FileWriter("default.dfa");
+        try {                            
+            if (nombreArchivo.contains(" ")) {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + "default.dfa");
                 myWriter.write(process);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
-            }else{
-                FileWriter myWriter = new FileWriter(nombreArchivo + ".dfa");
-                myWriter.write(process);
-                myWriter.close();
+            } else {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + nombreArchivo + ".dfa");
+                BufferedWriter bfwriter = new BufferedWriter(myWriter);
+                bfwriter.write(process);
+                bfwriter.close();
                 System.out.println("Successfully wrote to the file.");
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }
+        } 
         if(imprimirPantalla){
             System.out.println(process);
         }        
     } 
     
     public String procesarListaCadenasString(String[] listaCadenas, String nombreArchivo) {
-        String process = "";        
+        String process = "";              
         for(int j = 0; j < listaCadenas.length; j++){            
             String currentState = q0;
             String cadena = listaCadenas[j];
@@ -291,9 +299,10 @@ public class AFD extends AF {
             for (int i = 0; i < cadena.length(); i++) {
                 for (int k = 0; k < aux.length; k++) {
                     if (!Sigma.contains(String.valueOf(cadena.charAt(k)))) {
+                        System.out.println(j + cadena.charAt(k));
                         process += "Uno de los caracteres no está en el alfabeto \n";
-                    }
-                    break outerloop;
+                        break outerloop;
+                    }                    
                 }
                 process += "->(";
                 currentState = getNextState(currentState, String.valueOf(currentString.charAt(0)));
@@ -325,22 +334,23 @@ public class AFD extends AF {
             }
             process += "\n";
         }        
-        try {
-            if(nombreArchivo.contains(" ")){
-                FileWriter myWriter = new FileWriter("default.dfa");
+        try {                            
+            if (nombreArchivo.contains(" ")) {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + "default.dfa");
                 myWriter.write(process);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
-            }else{
-                FileWriter myWriter = new FileWriter(nombreArchivo + ".dfa");
-                myWriter.write(process);
-                myWriter.close();
+            } else {
+                FileWriter myWriter = new FileWriter(wPath + File.separator + nombreArchivo + ".dfa");
+                BufferedWriter bfwriter = new BufferedWriter(myWriter);
+                bfwriter.write(process);
+                bfwriter.close();
                 System.out.println("Successfully wrote to the file.");
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }
+        } 
         return process;
     }
         
@@ -384,4 +394,13 @@ public class AFD extends AF {
         }
         return afd;
     }      
+    
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        
+        // AFD
+        
+        AFD afd = new AFD("afdd");
+        String[] cadenas = {"Cd","ABC","ABCd"};
+        afd.procesarListaCadenas(cadenas,"EsteEsElOriginalNombreDelArchivo",true);        
+    }
 }
