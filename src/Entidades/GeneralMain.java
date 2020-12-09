@@ -14,7 +14,7 @@ import java.util.Collection;
 public class GeneralMain {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-/*        
+        
         // AFD
         
 //        AFD afd = new AFD("afdd");
@@ -44,14 +44,14 @@ public class GeneralMain {
 //        estadosAceptacionafpd.add("q0");
                 
         // AFPN
-
+//
 //        AFPN A1 = new AFPN("AFPN.pda");
 //        String cadena = "abab";
 //        System.out.println(A1.procesarCadena(cadena));
 //        System.out.println(A1.procesarCadenaConDetalles(cadena));
 //        System.out.println(A1.computarTodosLosProcesamientos(cadena,"nombreArchivo"));
 
-        
+        //MT
 //        MT mt = new MT("MaquinaDeTuring");
 //        String[] cadenasmt = {"abb","abbb","abba"};
 //        System.out.println(mt.procesarCadena(cadenasmt[0]));
@@ -60,7 +60,7 @@ public class GeneralMain {
 //        System.out.println(mt.procesarCadenaConDetalles(cadenasmt[1]));
 //        System.out.println(mt.procesarCadenaConDetalles(cadenasmt[2]));
 //        mt.procesarListaCadenas(cadenasmt,"PruebaCadenasParaMaquinaTuring",true);
-        */
+        
     //    MTP
     
         String cadena = "aabbcc";
@@ -113,7 +113,10 @@ public class GeneralMain {
         
 
 
+        //AF2P
+//        AF2P A1 = new AF2P("AF2P.msm");
     }
+
 }
 
 

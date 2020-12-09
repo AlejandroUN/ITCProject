@@ -8,12 +8,6 @@ public class TransitionAFPN {
     private String finalStates;
     private char pilaOut;               //Caracter de pila Resultante en la Pila del AFPN  (Insercion)
 
-    public TransitionAFPN() {
-        this.q0 = null;     //Estado Inicial
-        this.character = '0';   //Caracter con el que cambia
-        this.finalStates = null;    //Estados Finales []
-    }
-
     public TransitionAFPN(String q0, char character, char pilaIn, String finalStates, char pilaOut) {
         this.q0 = q0;
         this.character = character;
