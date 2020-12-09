@@ -2,12 +2,8 @@ package Entidades;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.Random;
-import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
 public class AFPN extends AFP {
 
@@ -73,90 +69,6 @@ public class AFPN extends AFP {
             pila += this.stack.get(this.stack.size() - i - 1);
         }
         return pila;
-    }
-
-    public int computarTodosLosProcesamientos(String cadena, String nombreArchivo) {
-        System.out.println("Cadena: " + cadena);
-
-        ArrayList<ArrayList<String>> lista = new ArrayList<>();
-
-        ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
-        ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
-
-        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
-            recorridoAFPN(cadena, q0);
-            if (!lista.contains(recorridos)) {
-                lista.add(recorridos);
-            }
-            this.recorridos = new ArrayList<>();
-            this.stack = new Stack<>();
-        }
-
-        for (int i = 0; i < lista.size(); i++) {
-            System.out.print("Procesamiento " + (i + 1) + ": \t");
-            System.out.print(lista.get(i).get(0));
-            for (int j = 1; j < lista.get(i).size(); j++) {
-                if (lista.get(i).get(j).equals("false") || lista.get(i).get(j).equals("true")) {
-                    System.out.print(">>");
-                    if (lista.get(i).get(j).equals("false")) {
-                        lista.get(i).set(j, "rejected");
-                        listaRechazo.add(lista.get(i));
-                        System.out.print(lista.get(i).get(j));
-                    } else if (lista.get(i).get(j).equals("true")) {
-                        lista.get(i).set(j, "acepted");
-                        listaAceptacion.add(lista.get(i));
-                        System.out.print(lista.get(i).get(j));
-                    }
-                    continue;
-                }
-                System.out.print("->" + lista.get(i).get(j));
-            }
-            System.out.println("");
-        }
-
-        try (FileWriter fw = new FileWriter(nombreArchivo + "RechazadasAFPN.txt", false);
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter out = new PrintWriter(bw)) {
-            out.println("Cadena: " + cadena);
-            for (int i = 0; i < listaRechazo.size(); i++) {
-                out.print("Procesamiento " + (i + 1) + ": \t");
-                out.print(listaRechazo.get(i).get(0));
-                for (int j = 0; j < listaRechazo.get(i).size(); j++) {
-                    if (listaRechazo.get(i).get(j).equals("rejected")) {
-                        out.print(">>");
-                        out.print(listaRechazo.get(i).get(j));
-                        continue;
-                    }
-                    out.print("->" + listaRechazo.get(i).get(j));
-                }
-                out.println("");
-            }
-        } catch (IOException e) {
-            System.out.println("Error, problemas al crear el Documento" + nombreArchivo + "RechazadasAFPN.txt");
-        }
-
-        try (FileWriter fw = new FileWriter(nombreArchivo + "AceptadasAFPN.txt", false);
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter out = new PrintWriter(bw)) {
-            out.println("Cadena: " + cadena);
-            for (int i = 0; i < listaAceptacion.size(); i++) {
-                out.print("Procesamiento " + (i + 1) + ": \t");
-                out.print(listaAceptacion.get(i).get(0));
-                for (int j = 0; j < listaAceptacion.get(i).size(); j++) {
-                    if (listaAceptacion.get(i).get(j).equals("acepted")) {
-                        out.print(">>");
-                        out.print(listaAceptacion.get(i).get(j));
-                        continue;
-                    }
-                    out.print("->" + listaAceptacion.get(i).get(j));
-                }
-                out.println("");
-            }
-        } catch (IOException e) {
-            System.out.println("Error, problemas al crear el Documento" + nombreArchivo + "AceptadasAFPN.txt");
-        }
-
-        return lista.size();
     }
 
     public void addToAlphabetFromARange(String range) {
@@ -321,6 +233,90 @@ public class AFPN extends AFP {
         return false;
     }
 
+    public int computarTodosLosProcesamientos(String cadena, String nombreArchivo) {
+        System.out.println("Cadena: " + cadena);
+
+        ArrayList<ArrayList<String>> lista = new ArrayList<>();
+
+        ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
+        ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
+
+        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+            recorridoAFPN(cadena, q0);
+            if (!lista.contains(recorridos)) {
+                lista.add(recorridos);
+            }
+            this.recorridos = new ArrayList<>();
+            this.stack = new Stack<>();
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            System.out.print("Procesamiento " + (i + 1) + ": \t");
+            System.out.print(lista.get(i).get(0));
+            for (int j = 1; j < lista.get(i).size(); j++) {
+                if (lista.get(i).get(j).equals("false") || lista.get(i).get(j).equals("true")) {
+                    System.out.print(">>");
+                    if (lista.get(i).get(j).equals("false")) {
+                        lista.get(i).set(j, "rejected");
+                        listaRechazo.add(lista.get(i));
+                        System.out.print(lista.get(i).get(j));
+                    } else if (lista.get(i).get(j).equals("true")) {
+                        lista.get(i).set(j, "acepted");
+                        listaAceptacion.add(lista.get(i));
+                        System.out.print(lista.get(i).get(j));
+                    }
+                    continue;
+                }
+                System.out.print("->" + lista.get(i).get(j));
+            }
+            System.out.println("");
+        }
+
+        try (FileWriter fw = new FileWriter(nombreArchivo + "RechazadasAFPN.txt", false);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.println("Cadena: " + cadena);
+            for (int i = 0; i < listaRechazo.size(); i++) {
+                out.print("Procesamiento " + (i + 1) + ": \t");
+                out.print(listaRechazo.get(i).get(0));
+                for (int j = 0; j < listaRechazo.get(i).size(); j++) {
+                    if (listaRechazo.get(i).get(j).equals("rejected")) {
+                        out.print(">>");
+                        out.print(listaRechazo.get(i).get(j));
+                        continue;
+                    }
+                    out.print("->" + listaRechazo.get(i).get(j));
+                }
+                out.println("");
+            }
+        } catch (IOException e) {
+            System.out.println("Error, problemas al crear el Documento" + nombreArchivo + "RechazadasAFPN.txt");
+        }
+
+        try (FileWriter fw = new FileWriter(nombreArchivo + "AceptadasAFPN.txt", false);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.println("Cadena: " + cadena);
+            for (int i = 0; i < listaAceptacion.size(); i++) {
+                out.print("Procesamiento " + (i + 1) + ": \t");
+                out.print(listaAceptacion.get(i).get(0));
+                for (int j = 0; j < listaAceptacion.get(i).size(); j++) {
+                    if (listaAceptacion.get(i).get(j).equals("acepted")) {
+                        out.print(">>");
+                        out.print(listaAceptacion.get(i).get(j));
+                        continue;
+                    }
+                    out.print("->" + listaAceptacion.get(i).get(j));
+                }
+                out.println("");
+            }
+        } catch (IOException e) {
+            System.out.println("Error, problemas al crear el Documento" + nombreArchivo + "AceptadasAFPN.txt");
+        }
+
+        return lista.size();
+    }
+
     public void procesarListaCadenas(ArrayList<String> cadenas, String nombreArchivo, boolean imprimirPantalla) {
         try {
             nombreArchivo = URLEncoder.encode(nombreArchivo, "UTF-8");
@@ -401,7 +397,73 @@ public class AFPN extends AFP {
             System.out.println("Error, problemas al crear el Documento" + nombreArchivo);
         }
         if (imprimirPantalla) {
-//            Se imprime el resultado
+            boolean flag = false;
+            for (String cadena : cadenas) {
+                System.out.print(cadena + "\t");
+                ArrayList<ArrayList<String>> lista = new ArrayList<>();
+
+                ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
+                ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
+
+                for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+                    recorridoAFPN(cadena, q0);
+                    if (!lista.contains(recorridos)) {
+                        lista.add(recorridos);
+                    }
+                    this.recorridos = new ArrayList<>();
+                    this.stack = new Stack<>();
+                }
+
+                for (int i = 0; i < lista.size(); i++) {
+                    for (int j = 1; j < lista.get(i).size(); j++) {
+                        if (lista.get(i).get(j).equals("false") || lista.get(i).get(j).equals("true")) {
+                            if (lista.get(i).get(j).equals("false")) {
+                                lista.get(i).set(j, "rejected");
+                                listaRechazo.add(lista.get(i));
+                            } else if (lista.get(i).get(j).equals("true")) {
+                                lista.get(i).set(j, "acepted");
+                                listaAceptacion.add(lista.get(i));
+                            }
+                        }
+                    }
+                }
+
+                if (!listaAceptacion.isEmpty()) {
+                    flag = true;
+                    for (int i = 0; i < listaAceptacion.size(); i++) {
+                        System.out.print(listaAceptacion.get(i).get(0));
+                        for (int j = 0; j < listaAceptacion.get(i).size(); j++) {
+                            if (listaAceptacion.get(i).get(j).equals("acepted")) {
+                                System.out.print(">>");
+                                System.out.print(listaAceptacion.get(i).get(j));
+                                break;
+                            }
+                            System.out.print("->" + listaAceptacion.get(i).get(j));
+                        }
+                        break;
+                    }
+                } else {
+                    for (int i = 0; i < listaRechazo.size(); i++) {
+                        System.out.print(listaRechazo.get(i).get(0));
+                        for (int j = 0; j < listaRechazo.get(i).size(); j++) {
+                            if (listaRechazo.get(i).get(j).equals("rejected")) {
+                                System.out.print(">>");
+                                System.out.print(listaRechazo.get(i).get(j));
+                                break;
+                            }
+                            System.out.print("->" + listaRechazo.get(i).get(j));
+                        }
+                        break;
+                    }
+                }
+                System.out.print("\t" + listaAceptacion.size() + "\t" + listaRechazo.size() + "\t");
+                if (flag) {
+                    System.out.print("yes");
+                } else {
+                    System.out.print("no");
+                }
+                System.out.println();
+            }
         }
     }
 
@@ -431,4 +493,73 @@ public class AFPN extends AFP {
         this.recorridos = recorridos;
     }
 
+    public Stack<String> getStack() {
+        return stack;
+    }
+
+    public void setStack(Stack<String> stack) {
+        this.stack = stack;
+    }
+
+    @Override
+    public ArrayList<String> getSigma() {
+        return Sigma;
+    }
+
+    @Override
+    public void setSigma(ArrayList<String> Sigma) {
+        this.Sigma = Sigma;
+    }
+
+    @Override
+    public ArrayList<String> getQ() {
+        return Q;
+    }
+
+    @Override
+    public void setQ(ArrayList<String> Q) {
+        this.Q = Q;
+    }
+
+    public String getQ0() {
+        return q0;
+    }
+
+    public void setQ0(String q0) {
+        this.q0 = q0;
+    }
+
+    @Override
+    public ArrayList<String> getF() {
+        return F;
+    }
+
+    @Override
+    public void setF(ArrayList<String> F) {
+        this.F = F;
+    }
+
+    @Override
+    public String toString() {
+        String afd = "#alphabet\n";
+        for (int i = 0; i < Sigma.size(); i++) {
+            afd += Sigma.get(i) + "\n";
+        }
+        afd += "#states\n";
+        for (int i = 0; i < Q.size(); i++) {
+            afd += Q.get(i) + "\n";
+        }
+        afd += "#initial\n";
+        afd += q0 + "\n";
+        afd += "#accepting\n";
+        for (int i = 0; i < F.size(); i++) {
+            afd += F.get(i) + "\n";
+        }
+        afd += "#transitions\n";
+        for (int i = 0; i < Delta.size(); i++) {
+            TransitionAFPN transition = Delta.get(i);
+            afd += transition.getq0() + ":" + transition.getCharacter() + ">" + transition.getFinalStates() + "\n";
+        }
+        return afd;
+    }
 }

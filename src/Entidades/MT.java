@@ -215,7 +215,7 @@ public class MT extends AF{
             } else if (getNextStepGivenATransition(currentState, String.valueOf(cadena.charAt(currentStringIndex)))[2] == "<") {
                 currentStringIndex--;
             }
-            currentState = nextState;
+            currentState = nextState;   
         }
         return isAnAcceptanceState(currentState);        
     }
