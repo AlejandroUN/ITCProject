@@ -1,6 +1,12 @@
 package Entidades;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MTN extends MT{
     
@@ -45,6 +51,42 @@ public class MTN extends MT{
         return false;
     } 
     
+    public String procesarCadenaString(String cadena) {
+        int i = 0;
+        String currentState = q0;
+        boolean flag = true;
+        while (flag){
+            char[] temp = cadena.toCharArray();
+            char symbol  = temp[i];
+            if (Delta.contains(currentState) && Delta.contains(symbol)){
+                for (TransitionMT mt : Delta){
+                    TransitionMT nsetup = mt;
+                    currentState = nsetup.initialState;
+                    String nsymbol = nsetup.symbol;
+                    if (nsetup.nextState == ">"){
+                        cadena = procesarCadenaMini(i, cadena, nsymbol, 1);
+                        i++;
+                    }
+                    else if (nsetup.nextState == "<"){
+                        cadena = procesarCadenaMini(i, cadena, nsymbol, 0);
+                        i--;
+                    }
+                    else {
+                        String[] ncadena = null;
+                        if (nsymbol != "!"){
+                            ncadena[i] = nsymbol;
+                        }
+                        cadena = ncadena[i];
+                    }
+                    if (F.contains(currentState)){
+                        return cadena;
+                    }
+                }
+            }
+        }
+        return null;
+    } 
+    
     public String procesarCadenaMini(int i, String cadena, String symbol, int direction){
         if (direction == 1){
             if (symbol != "!"){
@@ -55,6 +97,28 @@ public class MTN extends MT{
             }
         }
         return cadena;
+    }
+    
+    public void procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla){
+        File file = new File(nombreArchivo);
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo));
+            for (String str : listaCadenas){
+                String result = procesarCadenaString(str);
+                bw.write(str + "\n");
+                bw.write(result + "\n");
+                if (result != null) bw.write("yes");
+                else bw.write("no");
+                if (imprimirPantalla == true){
+                    System.out.println("Cadena de entrada: " + str);
+                    System.out.println("Cadena resultados: " + result);
+                    if (result != null) System.out.println("yes");
+                    else System.out.println("no");
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MTN.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
