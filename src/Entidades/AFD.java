@@ -21,8 +21,8 @@ import java.util.logging.Logger;
 
 public class AFD extends AF {
     
-    private  ArrayList<String> Sigma = new ArrayList<String>();
-    private static ArrayList<TransitionAFD> Delta = new ArrayList<TransitionAFD>();  
+    private ArrayList<String> Sigma = new ArrayList<String>();
+    public ArrayList<TransitionAFD> Delta = new ArrayList<TransitionAFD>();  
     
     static Path currentRelativePath = Paths.get("");
     static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFD" + File.separator + "writeFolder";

@@ -17,19 +17,20 @@ public class AFP extends AF{ // Super class af with stack
         super();
     }
     
-    public ArrayList<String> getSigma(){
-        return Sigma;
-    }
     
     public void setSigma(ArrayList<String> Sigma){
         this.Sigma = Sigma;
     }
-    
-    public ArrayList<String> getGamma(){
-        return Gamma;
+    public ArrayList<String> getSigma(){
+        return Sigma;
     }
     
     public void setGamma(ArrayList<String> Gamma){
         this.Gamma = Gamma;
     }
+    
+    public ArrayList<String> getGamma(){
+        return Gamma;
+    }
+
 }

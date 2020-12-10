@@ -272,6 +272,68 @@ public class AFPD extends AFP{
         return afpd;
     }
     
+    public AFPD hallarProductoCartesianoConAFD(AFPD afpd, AFD afd){
+        ArrayList<String>[] states = null;
+        states[0] = afpd.Q;
+        states[1] = afd.Q;
+        ArrayList<String>[] product_states = null;
+        int i = 0;
+        for(ArrayList<String> str : product(states)){
+            product_states[i] = str;
+            i++;
+        }
+        ArrayList NDelta = null;
+        for (ArrayList<String> state : product_states){
+            for (String[] t : afpd.Delta){
+                for (TransitionAFD l : afd.Delta){
+                    if ((state.get(0) == t[0]) && (state.get(1) == l.getInitialState())){
+                        String q_entrada = "(" + state.get(0) + "," + state.get(1) + ")";
+                        String caract = t[1];
+                        String top = t[2];
+                        String operation = t[4];
+                        String q_salida = "(" + t[3] + "," + l.getNextState() + ")";
+                        String[] ntransition = null;
+                        ntransition[0] = q_entrada;
+                        ntransition[1] = caract;
+                        ntransition[2] = top;
+                        ntransition[3] = operation;
+                        ntransition[4] = q_salida;
+                        NDelta.add(ntransition);
+                    }
+                }
+                if ((state.get(0) == t[0]) && (t[1] == "$")){
+                    String q_entrada = "(" + state.get(0) + "," + state.get(1) + ")";
+                    String caract = t[1];
+                    String top = t[2];
+                    String operation = t[4];
+                    String q_salida = "(" + t[3] + "," + state.get(1) + ")";
+                    String[] ntransition = null;
+                    ntransition[0] = q_entrada;
+                    ntransition[1] = caract;
+                    ntransition[2] = top;
+                    ntransition[3] = operation;
+                    ntransition[4] = q_salida;
+                    NDelta.add(ntransition);
+                }
+            }
+        }
+        ArrayList finales = null;
+        for (ArrayList<String> str : product_states){
+            if (afpd.F.contains(str.get(0)) && afd.F.contains(str.get(1))){
+                String final_state = "(" + str.get(0) + "," + str.get(1) + ")";
+                finales.add(final_state);
+            }
+        }
+        ArrayList nstates = null;
+        for (ArrayList<String> str : product_states){
+            nstates.add("(" + str.get(0) + "," + str.get(1) + ")");
+        }
+        String ninitial = "(" + afpd.q0 + "," + afd.q0 + ")";
+        
+        AFPD product_auto = new AFPD(nstates, ninitial, finales, afpd.getSigma(), afpd.getGamma(), NDelta);
+        return product_auto;
+    }
+
     public ArrayList<String[]> getDelta() {
         return Delta;
     }
@@ -294,6 +356,10 @@ public class AFPD extends AFP{
 
     public void setActualState(String actualState) {
         this.actualState = actualState;
+    }
+
+    private Iterable<ArrayList<String>> product(ArrayList<String>[] states) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
         
 }
