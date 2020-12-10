@@ -14,6 +14,13 @@ public class MTN extends MT{
         super(Sigma, Gamma, Q, q0, F, Delta);
     }
     
+    public MTN(String nombreArchivo) {
+        super();
+        setAtributesGivenAFile(nombreArchivo);
+        Sigma.add("!");
+        Gamma.add("!");
+    }
+    
     @Override
     public boolean procesarCadena(String cadena) {
         int i = 0;

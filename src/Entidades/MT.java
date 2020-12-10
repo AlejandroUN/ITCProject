@@ -45,6 +45,10 @@ public class MT extends AF{
         Gamma.add("!");
     }
     
+    public MT(){
+        super();
+    }
+    
     public void addToAlphabetFromARange(String range){        
         if(((int)range.charAt(0) >= 48) && ((int)range.charAt(0) <= 57)){
             for(int i = Character.getNumericValue(range.charAt(0)); i < Character.getNumericValue(range.charAt(2)) ; i++){                 
