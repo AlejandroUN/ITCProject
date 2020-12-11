@@ -149,11 +149,13 @@ public class AFPNProcesarListaCadenasView extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String[] strings = stringsTf.getText().split(",");
+        ArrayList<String> aux = new ArrayList<>();
+        aux.addAll(Arrays.asList(strings));
         if (Boolean.parseBoolean((String) jComboBox1.getSelectedItem())) {
-            proccesTa.setText(AFPN.procesarListaCadenasString((ArrayList<String>) Arrays.<String>asList(strings), fileNameTf.getText()));
+            proccesTa.setText(AFPN.procesarListaCadenasString(aux, fileNameTf.getText()));
             proccesTa.show();
         } else {
-            AFPN.procesarListaCadenas((ArrayList<String>) Arrays.<String>asList(strings), fileNameTf.getText(), Boolean.parseBoolean((String) jComboBox1.getSelectedItem()));
+            AFPN.procesarListaCadenas(aux, fileNameTf.getText(), Boolean.parseBoolean((String) jComboBox1.getSelectedItem()));
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

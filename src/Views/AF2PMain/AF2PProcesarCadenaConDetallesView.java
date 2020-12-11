@@ -5,6 +5,7 @@
  */
 package Views.AF2PMain;
 
+import Entidades.AF2P;
 import Views.AFPNMain.*;
 import Entidades.AFPN;
 
@@ -12,15 +13,17 @@ import Entidades.AFPN;
  *
  * @author aleja
  */
-public class AFPNProcesarCadenaConDetallesView extends javax.swing.JFrame {
+public class AF2PProcesarCadenaConDetallesView extends javax.swing.JFrame {
 
-    AFPN AFPN;
+    AF2P AF2P;
+
     /**
      * Creates new form AFDProcesarCadenaConDetallesView
+     * @param AF2P
      */
-    public AFPNProcesarCadenaConDetallesView(AFPN AFPN) {
+    public AF2PProcesarCadenaConDetallesView(AF2P AF2P) {
         initComponents();
-        this.AFPN = AFPN;
+        this.AF2P = AF2P;
         stringProcessTf.hide();
         questionLabel.hide();
         answerLabel.hide();
@@ -46,7 +49,7 @@ public class AFPNProcesarCadenaConDetallesView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("AFPN Procesar Cadena con Detalles");
+        jLabel1.setText("AF2P Procesar Cadena con Detalles");
 
         jLabel2.setText("Por favor ingrese la cadena");
 
@@ -83,7 +86,7 @@ public class AFPNProcesarCadenaConDetallesView extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(95, 95, 95)
                         .addComponent(jLabel1)
-                        .addGap(0, 79, Short.MAX_VALUE))
+                        .addGap(0, 80, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,18 +138,18 @@ public class AFPNProcesarCadenaConDetallesView extends javax.swing.JFrame {
 
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         questionLabel.show();
-        answerLabel.setText(Boolean.toString(AFPN.procesarCadenaConDetalles(stringTf.getText())));
+        answerLabel.setText(Boolean.toString(AF2P.procesarCadenaConDetalles(stringTf.getText())));
         answerLabel.show();
-        stringProcessTf.setText(AFPN.procesarCadenaConDetallesString(stringTf.getText()));
+        stringProcessTf.setText(AF2P.procesarCadenaConDetallesString(stringTf.getText()));
         stringProcessTf.show();
     }//GEN-LAST:event_processButtonActionPerformed
 
     private void comeBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comeBackButtonActionPerformed
-        AFPNOptionsView afdOptionsView = new AFPNOptionsView(AFPN);
+        AF2POptionsView afdOptionsView = new AF2POptionsView(AF2P);
         afdOptionsView.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_comeBackButtonActionPerformed
- 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel answerLabel;
     private javax.swing.JButton comeBackButton;

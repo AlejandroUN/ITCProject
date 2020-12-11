@@ -98,7 +98,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="M&#xe9;todos AFPN"/>
+        <Property name="text" type="java.lang.String" value="M&#xe9;todos AF2P"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

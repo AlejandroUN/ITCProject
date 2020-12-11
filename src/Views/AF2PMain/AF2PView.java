@@ -94,10 +94,10 @@ public class AF2PView extends javax.swing.JFrame {
     }//GEN-LAST:event_afdNameTfActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String afpnName = afdNameTf.getText();
-        AF2P AF2P = new AF2P(afpnName);
-//        AFPNOptionsView afdOptionsView = new AFPNOptionsView(afpn);
-        //        afdOptionsView.setVisible(true);
+        String af2pName = afdNameTf.getText();
+        AF2P AF2P = new AF2P(af2pName);
+        AF2POptionsView afdOptionsView = new AF2POptionsView(AF2P);
+        afdOptionsView.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

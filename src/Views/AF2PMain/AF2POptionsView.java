@@ -5,25 +5,22 @@
  */
 package Views.AF2PMain;
 
-import Views.AFPNMain.*;
-import Entidades.AFPN;
+import Entidades.AF2P;
 import Views.Main;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author aleja
  */
-public class AFPNOptionsView extends javax.swing.JFrame {
+public class AF2POptionsView extends javax.swing.JFrame {
 
-    AFPN AFPN;
+    AF2P AF2P;
     /**
      * Creates new form AFDOptionsView
-     * @param AFPN
+     * @param AF2P
      */
-    public AFPNOptionsView(AFPN AFPN) {
+    public AF2POptionsView(AF2P AF2P) {
         initComponents();
-        this.AFPN = AFPN;
+        this.AF2P = AF2P;
     }
 
     /**
@@ -46,7 +43,7 @@ public class AFPNOptionsView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Métodos AFPN");
+        jLabel1.setText("Métodos AF2P");
 
         jLabel2.setText("Por favor, seleccione uno de los métodos del autómata");
 
@@ -155,25 +152,25 @@ public class AFPNOptionsView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void procesarCadenaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procesarCadenaButtonActionPerformed
-       AFPNProcesarCadenaView afdProcesarCadenaView = new AFPNProcesarCadenaView(AFPN);
+       AF2PProcesarCadenaView afdProcesarCadenaView = new AF2PProcesarCadenaView(AF2P);
        afdProcesarCadenaView.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_procesarCadenaButtonActionPerformed
 
     private void processWithDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processWithDetailsButtonActionPerformed
-       AFPNProcesarCadenaConDetallesView afdProcesarCadenaConDetallesView = new AFPNProcesarCadenaConDetallesView(AFPN);
+       AF2PProcesarCadenaConDetallesView afdProcesarCadenaConDetallesView = new AF2PProcesarCadenaConDetallesView(AF2P);
        afdProcesarCadenaConDetallesView.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_processWithDetailsButtonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       AFPNProcesarListaCadenasView afdListaCadenasView = new AFPNProcesarListaCadenasView(AFPN);
+       AF2PProcesarListaCadenasView afdListaCadenasView = new AF2PProcesarListaCadenasView(AF2P);
        afdListaCadenasView.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       AFPNToString afdToString = new AFPNToString(AFPN);
+       AF2PToString afdToString = new AF2PToString(AF2P);
        afdToString.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed

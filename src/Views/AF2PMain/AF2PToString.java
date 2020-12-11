@@ -5,6 +5,7 @@
  */
 package Views.AF2PMain;
 
+import Entidades.AF2P;
 import Views.AFPNMain.*;
 import Views.AFDMain.*;
 import Entidades.AFD;
@@ -14,16 +15,18 @@ import Entidades.AFPN;
  *
  * @author aleja
  */
-public class AFPNToString extends javax.swing.JFrame {
+public class AF2PToString extends javax.swing.JFrame {
 
-    AFPN AFPN;
+    AF2P AF2P;
+
     /**
      * Creates new form AFDToString
+     * @param AF2P
      */
-    public AFPNToString(AFPN AFPN) {
+    public AF2PToString(AF2P AF2P) {
         initComponents();
-        this.AFPN = AFPN;
-        content.setText(AFPN.toString());
+        this.AF2P = AF2P;
+        content.setText(AF2P.toString());
     }
 
     /**
@@ -42,7 +45,7 @@ public class AFPNToString extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("AFPN To String");
+        jLabel1.setText("AF2P To String");
 
         content.setColumns(20);
         content.setRows(5);
@@ -89,9 +92,9 @@ public class AFPNToString extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void comeBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comeBackButtonActionPerformed
-       AFPNOptionsView afdOptionsView = new AFPNOptionsView(AFPN);
-       afdOptionsView.setVisible(true);
-       this.dispose();
+        AF2POptionsView afdOptionsView = new AF2POptionsView(AF2P);
+        afdOptionsView.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_comeBackButtonActionPerformed
 
 
