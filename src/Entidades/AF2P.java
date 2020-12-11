@@ -14,6 +14,7 @@ public class AF2P extends AFP {
     private Stack<String> stackA = new Stack<>();
     private Stack<String> stackB = new Stack<>();
     private ArrayList<String> recorridos = new ArrayList<>();
+    private int regex = 500000;
 
     static Path currentRelativePath = Paths.get("");
     static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPN" + File.separator + "writeFolder";
@@ -228,7 +229,7 @@ public class AF2P extends AFP {
 
     public boolean procesarCadena(String cadena) {
         ArrayList<ArrayList<String>> lista = new ArrayList<>();
-        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+        for (int i = 0; i < regex * cadena.length(); i++) {       //Funcion Probabilística
             recorridoAF2P(cadena, q0);
             if (!lista.contains(recorridos)) {
                 lista.add(recorridos);
@@ -242,7 +243,7 @@ public class AF2P extends AFP {
 
     public boolean procesarCadenaConDetalles(String cadena) {
         ArrayList<ArrayList<String>> lista = new ArrayList<>();
-        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+        for (int i = 0; i < regex * cadena.length(); i++) {       //Funcion Probabilística
             recorridoAF2P(cadena, q0);
             if (!lista.contains(recorridos)) {
                 lista.add(recorridos);
@@ -288,7 +289,7 @@ public class AF2P extends AFP {
     public String procesarCadenaConDetallesString(String cadena) {
         String procesamiento = "";
         ArrayList<ArrayList<String>> lista = new ArrayList<>();
-        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+        for (int i = 0; i < regex * cadena.length(); i++) {       //Funcion Probabilística
             recorridoAF2P(cadena, q0);
             if (!lista.contains(recorridos)) {
                 lista.add(recorridos);
@@ -349,7 +350,7 @@ public class AF2P extends AFP {
         ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
         ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
 
-        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+        for (int i = 0; i < regex * cadena.length(); i++) {       //Funcion Probabilística
             recorridoAF2P(cadena, q0);
             if (!lista.contains(recorridos)) {
                 lista.add(recorridos);
@@ -443,7 +444,7 @@ public class AF2P extends AFP {
                 ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
                 ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
 
-                for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+                for (int i = 0; i < regex * cadena.length(); i++) {       //Funcion Probabilística
                     recorridoAF2P(cadena, q0);
                     if (!lista.contains(recorridos)) {
                         lista.add(recorridos);
@@ -589,7 +590,7 @@ public class AF2P extends AFP {
             ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
             ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
 
-            for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+            for (int i = 0; i < regex * cadena.length(); i++) {       //Funcion Probabilística
                 recorridoAF2P(cadena, q0);
                 if (!lista.contains(recorridos)) {
                     lista.add(recorridos);
