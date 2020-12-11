@@ -67,13 +67,14 @@ public class AFPD extends AFP{
     
     public void setAtributesByFile(String fileName) throws FileNotFoundException{
         boolean reader = false;
-        String name = fileName + ".dpda";
+        fileName = fileName + ".dpda";
         String aux = "";
         String line = "";
         try {
             BufferedReader rd =new BufferedReader(new FileReader(new File(rPath + File.separator + fileName)));            
             while(rd.readLine() != null){
                 line = rd.readLine();
+                System.out.println(line);
                 if(contain(line, "#states")){
                     aux = "#states";
                 } else if(contain(aux, "#states") && (line.length() != 0)) {
@@ -90,21 +91,28 @@ public class AFPD extends AFP{
                     aux = "#transitions";
                 } else if(contain(line, "#transitions") && (line.length() != 0)){
                     String initialState = line.split(":")[0];
-                    String symbol = line.split(":")[1].split(">")[0];
-                    String nextState = line.split(":")[1].split(">")[1];
-                    String[] transition = null;                
-                    Delta.add(transition);  
-                } else if(contain(line, "#alphabetC")){
-                    aux = "#alphabetC";
-                } else if(contain(line, "#alphabetC")){
+                    String symbol = line.split(":")[1];
+                    String nextState = line.split(":")[2].split(">")[1];
+                    String parametro = line.split(":")[2].split(">")[0];
+                    String operacion = line.split(":")[3];
+                    String[] transition = new String[5];
+                    transition[0] = initialState;
+                    transition[1] = symbol;
+                    transition[2] = parametro;
+                    transition[3] = nextState;
+                    transition[4] = operacion;
+                    this.Delta.add(transition);  
+                } else if(contain(line, "#tapeAlphabet")){
+                    aux = "#tapeAlphabet";
+                } else if(contain(line, "#tapeAlphabet")){
                     if(line.length() != 1){
                         addToAlphabetFromARange(line, Sigma);
                     } else {
                         Sigma.add(line);
                     }
-                } else if(contain(line, "#alphabetP")){
-                    aux = "#alphabetP";
-                } else if(contain(line, "#alphabetP")){
+                } else if(contain(line, "#stackAlphabet")){
+                    aux = "#stackAlphabet";
+                } else if(contain(line, "#stackAlphabet")){
                     if(line.length() != 1){
                         addToAlphabetFromARange(line, Gamma);
                     } else {
