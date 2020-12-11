@@ -2,6 +2,8 @@ package Entidades;
 
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +14,12 @@ public class AF2P extends AFP {
     private Stack<String> stackA = new Stack<>();
     private Stack<String> stackB = new Stack<>();
     private ArrayList<String> recorridos = new ArrayList<>();
+
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPN" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPN" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath);
 
     public AF2P(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<TransitionAF2P> Delta) {
         super(Q, q0, F, Sigma, Gamma);
@@ -51,7 +59,7 @@ public class AF2P extends AFP {
     public boolean setAtributesGivenAFile(String nombreArchivo) {
         boolean state = false;
         String curSection = "WTF";
-        String fileName = nombreArchivo;
+        String fileName = nombreArchivo + ".msm";
         String curLine = "";
         try {
             BufferedReader myReader = new BufferedReader(new FileReader(new File(fileName)));
@@ -275,6 +283,62 @@ public class AF2P extends AFP {
             }
         }
         return false;
+    }
+
+    public String procesarCadenaConDetallesString(String cadena) {
+        String procesamiento = "";
+        ArrayList<ArrayList<String>> lista = new ArrayList<>();
+        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+            recorridoAF2P(cadena, q0);
+            if (!lista.contains(recorridos)) {
+                lista.add(recorridos);
+            }
+            this.recorridos = new ArrayList<>();
+            this.stackA = new Stack<>();
+            this.stackB = new Stack<>();
+        }
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).get(lista.get(i).size() - 1).equals("true")) {
+                System.out.print("Procesamiento " + (i + 1) + ": \t");
+                procesamiento += "Procesamiento " + (i + 1) + ": \t";
+                System.out.print(lista.get(i).get(0));
+                procesamiento += lista.get(i).get(0);
+                for (int j = 0; j < lista.get(i).size(); j++) {
+                    if (lista.get(i).get(j).equals("true")) {
+                        System.out.print(">>");
+                        procesamiento += ">>";
+                        lista.get(i).set(j, "acepted");
+                        System.out.println(lista.get(i).get(j));
+                        procesamiento += lista.get(i).get(j);
+                        return procesamiento;
+                    }
+                    System.out.print("->" + lista.get(i).get(j));
+                    procesamiento += "->" + lista.get(i).get(j);
+                }
+            }
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).get(lista.get(i).size() - 1).equals("false")) {
+                System.out.print("Procesamiento " + (i + 1) + ": \t");
+                procesamiento += "Procesamiento " + (i + 1) + ": \t";
+                System.out.print(lista.get(i).get(0));
+                procesamiento += lista.get(i).get(0);
+                for (int j = 0; j < lista.get(i).size(); j++) {
+                    if (lista.get(i).get(j).equals("false")) {
+                        System.out.print(">>");
+                        procesamiento += ">>";
+                        lista.get(i).set(j, "rejected");
+                        System.out.println(lista.get(i).get(j));
+                        procesamiento += lista.get(i).get(j);
+                        continue;
+                    }
+                    System.out.print("->" + lista.get(i).get(j));
+                    procesamiento += "->" + lista.get(i).get(j);
+                }
+            }
+        }
+        return procesamiento;
     }
 
     public int computarTodosLosProcesamientos(String cadena, String nombreArchivo) {
@@ -512,6 +576,92 @@ public class AF2P extends AFP {
                 System.out.println();
             }
         }
+    }
+
+    public String procesarListaCadenasString(ArrayList<String> cadenas, String nombreArchivo) {
+        String procesamiento = "";
+        boolean flag = false;
+        for (String cadena : cadenas) {
+            System.out.print(cadena + "\t");
+            procesamiento += cadena + "\t";
+            ArrayList<ArrayList<String>> lista = new ArrayList<>();
+
+            ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
+            ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
+
+            for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+                recorridoAF2P(cadena, q0);
+                if (!lista.contains(recorridos)) {
+                    lista.add(recorridos);
+                }
+                this.recorridos = new ArrayList<>();
+                this.stackA = new Stack<>();
+                this.stackB = new Stack<>();
+            }
+
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 1; j < lista.get(i).size(); j++) {
+                    if (lista.get(i).get(j).equals("false") || lista.get(i).get(j).equals("true")) {
+                        if (lista.get(i).get(j).equals("false")) {
+                            lista.get(i).set(j, "rejected");
+                            listaRechazo.add(lista.get(i));
+                        } else if (lista.get(i).get(j).equals("true")) {
+                            lista.get(i).set(j, "acepted");
+                            listaAceptacion.add(lista.get(i));
+                        }
+                    }
+                }
+            }
+
+            if (!listaAceptacion.isEmpty()) {
+                flag = true;
+                for (int i = 0; i < listaAceptacion.size(); i++) {
+                    System.out.print(listaAceptacion.get(i).get(0));
+                    procesamiento += listaAceptacion.get(i).get(0);
+                    for (int j = 0; j < listaAceptacion.get(i).size(); j++) {
+                        if (listaAceptacion.get(i).get(j).equals("acepted")) {
+                            System.out.print(">>");
+                            procesamiento += ">>";
+                            System.out.print(listaAceptacion.get(i).get(j));
+                            procesamiento += listaAceptacion.get(i).get(j);
+                            break;
+                        }
+                        System.out.print("->" + listaAceptacion.get(i).get(j));
+                        procesamiento += "->" + listaAceptacion.get(i).get(j);
+                    }
+                    break;
+                }
+            } else {
+                for (int i = 0; i < listaRechazo.size(); i++) {
+                    System.out.print(listaRechazo.get(i).get(0));
+                    procesamiento += listaRechazo.get(i).get(0);
+                    for (int j = 0; j < listaRechazo.get(i).size(); j++) {
+                        if (listaRechazo.get(i).get(j).equals("rejected")) {
+                            System.out.print(">>");
+                            procesamiento += ">>";
+                            System.out.print(listaRechazo.get(i).get(j));
+                            procesamiento += listaRechazo.get(i).get(j);
+                            break;
+                        }
+                        System.out.print("->" + listaRechazo.get(i).get(j));
+                        procesamiento += "->" + listaRechazo.get(i).get(j);
+                    }
+                    break;
+                }
+            }
+            System.out.print("\t" + listaAceptacion.size() + "\t" + listaRechazo.size() + "\t");
+            procesamiento += "\t" + listaAceptacion.size() + "\t" + listaRechazo.size() + "\t";
+            if (flag) {
+                System.out.print("yes");
+                procesamiento += "yes";
+            } else {
+                System.out.print("no");
+                procesamiento += "no";
+            }
+            System.out.println();
+            procesamiento += "\n";
+        }
+        return procesamiento;
     }
 
     public ArrayList<TransitionAF2P> getDelta() {

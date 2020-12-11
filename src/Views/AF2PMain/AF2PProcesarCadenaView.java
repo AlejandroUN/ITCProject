@@ -5,6 +5,7 @@
  */
 package Views.AF2PMain;
 
+import Entidades.AF2P;
 import Views.AFPNMain.*;
 import Entidades.AFPN;
 
@@ -12,18 +13,18 @@ import Entidades.AFPN;
  *
  * @author aleja
  */
-public class AFPNProcesarCadenaView extends javax.swing.JFrame {
+public class AF2PProcesarCadenaView extends javax.swing.JFrame {
 
-    AFPN AFPN;
+    AF2P AF2P;
 
     /**
      * Creates new form AFDProcesarCadenaView
      */
-    public AFPNProcesarCadenaView(AFPN AFPN) {
+    public AF2PProcesarCadenaView(AF2P AF2P) {
         initComponents();
         questionLabel.hide();
         answerLabel.hide();
-        this.AFPN = AFPN;
+        this.AF2P = AF2P;
     }
 
     /**
@@ -140,13 +141,13 @@ public class AFPNProcesarCadenaView extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String string = stringTf.getText();
-        answerLabel.setText(Boolean.toString(AFPN.procesarCadena(string)));
+        answerLabel.setText(Boolean.toString(AF2P.procesarCadena(string)));
         answerLabel.show();
         questionLabel.show();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void comeBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comeBackButtonActionPerformed
-        AFPNOptionsView afdOptionsView = new AFPNOptionsView(AFPN);
+        AF2POptionsView afdOptionsView = new AF2POptionsView(AF2P);
         afdOptionsView.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_comeBackButtonActionPerformed
