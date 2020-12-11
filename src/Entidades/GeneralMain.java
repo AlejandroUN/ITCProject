@@ -63,58 +63,56 @@ public class GeneralMain {
         
     //    MTP
     
-        String cadena = "aabbcc";
-        String q0 = "q0";
-        ArrayList<String> Sigma = new ArrayList<>();
-        Sigma.add("A");
-        Sigma.add("B");
-        Sigma.add("C");
-        Sigma.add("a");
-        Sigma.add("b");
-        Sigma.add("c");
-        Sigma.add("!");
-        Sigma.add("X");
-        Sigma.add("Y");
-        Sigma.add("Z");
-        ArrayList<String> Q = new ArrayList<>();
-        Q.add("q0");
-        Q.add("q1");
-        Q.add("q2");
-        Q.add("q3");
-        ArrayList<String> F = new ArrayList<>();
-        F.add("q0");
-        
-        
-        ArrayList<ArrayList<String>> S = new ArrayList<>();
-        for (int i = 0; i <cadena.length() ; i++) {
-            ArrayList<String> aux = new ArrayList<>();
-            aux.add(String.valueOf(cadena.charAt(i)));
-            S.add(aux);
-        }
-        
-        ArrayList<TransitionMTP> Delta = new ArrayList<TransitionMTP>();
-        Delta.add(new TransitionMTP("q0", new ArrayList<String>(Arrays.asList("a","!")), "q1", new ArrayList<String>(Arrays.asList("a","X")) ,">"));
-        Delta.add(new TransitionMTP("q1", new ArrayList<String>(Arrays.asList("a","!")), "q1", new ArrayList<String>(Arrays.asList("a","!")) ,">"));
-        Delta.add(new TransitionMTP("q1", new ArrayList<String>(Arrays.asList("b","Y")), "q1", new ArrayList<String>(Arrays.asList("b","Y")) ,">"));
-        Delta.add(new TransitionMTP("q1", new ArrayList<String>(Arrays.asList("b","!")), "q2", new ArrayList<String>(Arrays.asList("b","Y")) ,">"));
-        Delta.add(new TransitionMTP("q2", new ArrayList<String>(Arrays.asList("b","!")), "q2", new ArrayList<String>(Arrays.asList("b","!")) ,">"));
-        Delta.add(new TransitionMTP("q2", new ArrayList<String>(Arrays.asList("c","Z")), "q2", new ArrayList<String>(Arrays.asList("c","Z")) ,">"));
-        Delta.add(new TransitionMTP("q2", new ArrayList<String>(Arrays.asList("c","!")), "q3", new ArrayList<String>(Arrays.asList("c","Z")) ,"<"));
-        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("b","!")), "q3", new ArrayList<String>(Arrays.asList("b","X")) ,"<"));
-        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("a","!")), "q3", new ArrayList<String>(Arrays.asList("a","!")) ,"<"));
-        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("b","Y")), "q3", new ArrayList<String>(Arrays.asList("b","Y")) ,"<"));
-        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("c","Z")), "q3", new ArrayList<String>(Arrays.asList("c","Z")) ,"<"));
-        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("a","X")), "q0", new ArrayList<String>(Arrays.asList("a","X")) ,">"));
-        
-        MTP mtp1 = new MTP(Sigma, Sigma, Q, "q0", F, Delta, S);
-        System.out.println(mtp1.procesarCadena(cadena));
-        
-        
-        
-
+//        String cadena = "aabbcc";
+//        String q0 = "q0";
+//        ArrayList<String> Sigma = new ArrayList<>();
+//        Sigma.add("A");
+//        Sigma.add("B");
+//        Sigma.add("C");
+//        Sigma.add("a");
+//        Sigma.add("b");
+//        Sigma.add("c");
+//        Sigma.add("!");
+//        Sigma.add("X");
+//        Sigma.add("Y");
+//        Sigma.add("Z");
+//        ArrayList<String> Q = new ArrayList<>();
+//        Q.add("q0");
+//        Q.add("q1");
+//        Q.add("q2");
+//        Q.add("q3");
+//        ArrayList<String> F = new ArrayList<>();
+//        F.add("q0");
+//        
+//        
+//        ArrayList<ArrayList<String>> S = new ArrayList<>();
+//        for (int i = 0; i <cadena.length() ; i++) {
+//            ArrayList<String> aux = new ArrayList<>();
+//            aux.add(String.valueOf(cadena.charAt(i)));
+//            S.add(aux);
+//        }
+//        
+//        ArrayList<TransitionMTP> Delta = new ArrayList<TransitionMTP>();
+//        Delta.add(new TransitionMTP("q0", new ArrayList<String>(Arrays.asList("a","!")), "q1", new ArrayList<String>(Arrays.asList("a","X")) ,">"));
+//        Delta.add(new TransitionMTP("q1", new ArrayList<String>(Arrays.asList("a","!")), "q1", new ArrayList<String>(Arrays.asList("a","!")) ,">"));
+//        Delta.add(new TransitionMTP("q1", new ArrayList<String>(Arrays.asList("b","Y")), "q1", new ArrayList<String>(Arrays.asList("b","Y")) ,">"));
+//        Delta.add(new TransitionMTP("q1", new ArrayList<String>(Arrays.asList("b","!")), "q2", new ArrayList<String>(Arrays.asList("b","Y")) ,">"));
+//        Delta.add(new TransitionMTP("q2", new ArrayList<String>(Arrays.asList("b","!")), "q2", new ArrayList<String>(Arrays.asList("b","!")) ,">"));
+//        Delta.add(new TransitionMTP("q2", new ArrayList<String>(Arrays.asList("c","Z")), "q2", new ArrayList<String>(Arrays.asList("c","Z")) ,">"));
+//        Delta.add(new TransitionMTP("q2", new ArrayList<String>(Arrays.asList("c","!")), "q3", new ArrayList<String>(Arrays.asList("c","Z")) ,"<"));
+//        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("b","!")), "q3", new ArrayList<String>(Arrays.asList("b","X")) ,"<"));
+//        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("a","!")), "q3", new ArrayList<String>(Arrays.asList("a","!")) ,"<"));
+//        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("b","Y")), "q3", new ArrayList<String>(Arrays.asList("b","Y")) ,"<"));
+//        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("c","Z")), "q3", new ArrayList<String>(Arrays.asList("c","Z")) ,"<"));
+//        Delta.add(new TransitionMTP("q3", new ArrayList<String>(Arrays.asList("a","X")), "q0", new ArrayList<String>(Arrays.asList("a","X")) ,">"));
+//        
+//        MTP mtp1 = new MTP(Sigma, Sigma, Q, "q0", F, Delta, S);
+//        System.out.println(mtp1.procesarCadena(cadena));
+//        
 
         //AF2P
-//        AF2P A1 = new AF2P("AF2P.msm");
+        AF2P A1 = new AF2P("AF2P");
+        System.out.println(A1.computarTodosLosProcesamientos("aaabbbccc", "salida"));
     }
 
 }

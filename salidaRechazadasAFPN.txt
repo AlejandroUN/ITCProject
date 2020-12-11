@@ -1,0 +1,9 @@
+Cadena: aaabbbccc
+Procesamiento 1: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)>>rejected
+Procesamiento 2: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)>>rejected
+Procesamiento 3: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)>>rejected
+Procesamiento 4: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)->(q0,bbbccc,AAA,AAA)>>rejected
+Procesamiento 5: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)->(q0,bbbccc,AAA,AAA)->(q1,bbccc,AA,AAA)>>rejected
+Procesamiento 6: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)->(q0,bbbccc,AAA,AAA)->(q1,bbccc,AA,AAA)->(q1,bccc,A,AAA)->(q1,ccc,$,AAA)->(q2,cc,$,AA)>>rejected
+Procesamiento 7: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)->(q0,bbbccc,AAA,AAA)->(q1,bbccc,AA,AAA)->(q1,bccc,A,AAA)>>rejected
+Procesamiento 8: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)->(q0,bbbccc,AAA,AAA)->(q1,bbccc,AA,AAA)->(q1,bccc,A,AAA)->(q1,ccc,$,AAA)>>rejected

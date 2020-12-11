@@ -1,0 +1,2 @@
+Cadena: aaabbbccc
+Procesamiento 1: 	(q0,aaabbbccc,$,$)->(q0,aaabbbccc,$,$)->(q0,aabbbccc,A,A)->(q0,abbbccc,AA,AA)->(q0,bbbccc,AAA,AAA)->(q1,bbccc,AA,AAA)->(q1,bccc,A,AAA)->(q1,ccc,$,AAA)->(q2,cc,$,AA)->(q2,c,$,A)->(q2,$,$,$)>>acepted
