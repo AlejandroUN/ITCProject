@@ -1,0 +1,25 @@
+El proyecto está organizado por dos carpetas principales:
+
+1. Entidades:
+En este paquete se encuentran las clases de cada autómata, los cuales son:
+AFD
+AFPD
+AFPN
+AF2P
+MT
+MTMC
+MTP
+MTN
+
+En cada clase se encuentran los métodos especificados de cada archivo
+
+2.Views:
+
+Por cada autómata hay un subpaquete por cada autómata, donde se encuentran
+las interfaces para cada uno de los métodos del autómata
+
+Cada clase de cada subpaquete es de uno de los métodos del autómata, por ejemplo:
+Existe una clase diferente por cada autómata para el método procesarCadena, procesarCadenaConDetalles
+y así sucesivamente
+
+

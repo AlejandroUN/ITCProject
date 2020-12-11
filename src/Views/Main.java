@@ -45,6 +45,7 @@ public class Main extends javax.swing.JFrame {
         mtmcButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        MTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,6 +102,8 @@ public class Main extends javax.swing.JFrame {
 
         jLabel2.setText("Por favor, escoja uno de los autómatas:");
 
+        MTN.setText("MTN");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,7 +125,9 @@ public class Main extends javax.swing.JFrame {
                                     .addComponent(af2pButton)
                                     .addComponent(afdButton))
                                 .addGap(137, 137, 137)
-                                .addComponent(mtButton))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(mtButton)
+                                    .addComponent(MTN)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(afpdButton)
                                 .addGap(136, 136, 136)
@@ -151,6 +156,8 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(afpdButton))
                         .addGap(18, 18, 18)
                         .addComponent(mtmcButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(MTN)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 43, Short.MAX_VALUE)
@@ -241,6 +248,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton MTN;
     private javax.swing.JButton af2pButton;
     private javax.swing.JButton afdButton;
     private javax.swing.JButton afpdButton;

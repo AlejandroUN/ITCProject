@@ -42,8 +42,11 @@
                                   <Component id="af2pButton" min="-2" max="-2" attributes="0"/>
                                   <Component id="afdButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="137" max="-2" attributes="0"/>
-                              <Component id="mtButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="137" pref="137" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="mtButton" min="-2" max="-2" attributes="0"/>
+                                  <Component id="MTN" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="afpdButton" min="-2" max="-2" attributes="0"/>
@@ -82,6 +85,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="mtmcButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="MTN" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -161,6 +166,11 @@
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="text" type="java.lang.String" value="Por favor, escoja uno de los aut&#xf3;matas:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="MTN">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="MTN"/>
       </Properties>
     </Component>
   </SubComponents>
