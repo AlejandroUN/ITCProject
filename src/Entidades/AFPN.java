@@ -2,6 +2,8 @@ package Entidades;
 
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.*;
 
@@ -11,6 +13,12 @@ public class AFPN extends AFP {
     private Stack<String> stack = new Stack<>();
     private ArrayList<String> recorridos = new ArrayList<>();
 
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPN" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);    
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPN" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath); 
+    
     //          (Estados,   estado Inicial, estados Aceptacion, Alfabeto, Alfabeto Pila, Transiciones)
     public AFPN(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<TransitionAFPN> Delta) {
         super(Q, q0, F, Sigma, Gamma);
@@ -108,10 +116,10 @@ public class AFPN extends AFP {
     public boolean setAtributesGivenAFile(String nombreArchivo) {
         boolean state = false;
         String curSection = "WTF";
-        String fileName = nombreArchivo;
+        String fileName = nombreArchivo + ".pda";
         String curLine = "";
         try {
-            BufferedReader myReader = new BufferedReader(new FileReader(new File(fileName)));
+            BufferedReader myReader=new BufferedReader(new FileReader(new File(rPath + File.separator + fileName)));     
             while ((curLine = myReader.readLine()) != null) {
                 if (personalContain(curLine, "#alphabet")) {
                     curSection = "#alphabet";
@@ -387,7 +395,7 @@ public class AFPN extends AFP {
         } catch (UnsupportedEncodingException ex) {
             nombreArchivo = "procesamientoAFPNDefault.pda";
         }
-        try (FileWriter fw = new FileWriter(nombreArchivo, false);
+        try (FileWriter fw = new FileWriter(wPath + File.separator + nombreArchivo + ".dfa");
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw)) {
             boolean flag = false;

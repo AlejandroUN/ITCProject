@@ -99,7 +99,7 @@ public class AFPNView extends javax.swing.JFrame {
         String afpnName = afdNameTf.getText();
         AFPN afpn = new AFPN(afpnName);
         AFPNOptionsView afdOptionsView = new AFPNOptionsView(afpn);
-//        afdOptionsView.setVisible(true);
+        afdOptionsView.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
