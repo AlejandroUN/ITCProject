@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,12 @@ public class MTMC extends AF{
     private String[] cintas;
     private String estadoActual;
     private int numeroDeCintas;
+    
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "MTMC" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);    
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "MTMC" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath);  
 
     private MTMC(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<String[]> Delta) {
         super(Q, q0, F);
@@ -65,11 +73,11 @@ public class MTMC extends AF{
     
     public void setAtributesByFile(String fileName) throws FileNotFoundException, IOException{
         boolean reader = false;
-        String name = fileName + ".dfa";
+        String name = fileName + ".mttm";
         String aux = "";
         String line = "";
         try {
-            BufferedReader rd = new BufferedReader(new FileReader(new File(name)));
+            BufferedReader rd = new BufferedReader(new FileReader(new File(rPath + File.separator + fileName)));            
             while(rd.readLine() != null){
                 line = rd.readLine();
                 if(contain(line, "#states")){
@@ -187,7 +195,7 @@ public class MTMC extends AF{
     return aprobacionCadena;
     }
     
-    private boolean procesarCadenaConDetalles(String cadena){
+    public boolean procesarCadenaConDetalles(String cadena){
         cintas[0] = cadena;
         estadoActual = q0;
         String cintasImpresion = "";
@@ -273,6 +281,93 @@ public class MTMC extends AF{
         }
         System.out.println(impresion);
     return aprobacionCadena;
+    }
+    
+    public String procesarCadenaConDetallesString(String cadena){
+        cintas[0] = cadena;
+        estadoActual = q0;
+        String cintasImpresion = "";
+        for(int i = 1; i <= cintas.length; i++){
+            cintasImpresion = cintasImpresion + ",*!";
+        }
+        String impresion;
+        impresion = "(" + q0 + ",*" + cadena + cintasImpresion + ")->";
+        boolean aprobacionCadena = false;
+        String[] arrayCadena = new String[cadena.length()];
+        for(int i = 0; i<cadena.length(); i++){
+            arrayCadena[i] = String.valueOf(cadena.charAt(i));
+        }
+        boolean aprobacionSigma = true;
+        for (String arrayCadena1 : arrayCadena) {
+            if (!Sigma.contains(arrayCadena1)) {
+                aprobacionSigma = false;
+                break;
+            }
+        }
+        if(!aprobacionSigma) return impresion + "rechazo";
+        int k = numeroDeCintas;
+        int[] posicionesEnCintas = new int[k];
+        String[] transicionActual = new String[(3*k)+2];
+        boolean aprobacionTransicion = true;
+        String charToString = "";
+        while(!F.contains(estadoActual)){                   //Mientras el estado actual no haga parte del conjunto de estados de aceptación
+            for(String[] transicion : Delta){               //Revisa todas las posibles transiciones para verificar la correcta (si existe)
+                if(transicion[0].equals(estadoActual)){     //Encuentra las posibles transiciones del estado actual
+                    for(int i = 1; i <= k; i++){            //Compara todos los valores de las cintas con los valores de la transicion
+                        charToString = String.valueOf(cintas[i-1].charAt(posicionesEnCintas[i]));
+                        if(!transicion[i].equals(charToString)){
+                            aprobacionTransicion = false;
+                            break;
+                        }
+                    }
+                }
+                if(aprobacionTransicion){
+                    transicionActual = transicion;
+                    break;
+                }
+            }
+            if(!aprobacionTransicion) return impresion + "rechazo";
+            String cadenaAux = cintas[0];
+            for(int n = 1; n <= k; n++){
+                cadenaAux = cadenaAux.substring(0, posicionesEnCintas[n]) + transicionActual[k+(2*n)] + cadenaAux.substring(n);
+                if(transicionActual[k+(2*n)+1].equals("<")){
+                    if(posicionesEnCintas[n] == 0){
+                        cadenaAux = "!" + cadenaAux;
+                    }
+                    else{
+                        posicionesEnCintas[n] = posicionesEnCintas[n] - 1;
+                    }
+                }
+                else if(transicionActual[k+(2*n)+1].equals("-")){
+                    
+                }
+                else if(transicionActual[k+(2*n)+1].equals(">")){
+                    if(posicionesEnCintas[n] == cintas[n].length()){
+                        cadenaAux = cadenaAux + "!";
+                    }
+                    else{
+                        posicionesEnCintas[n] = posicionesEnCintas[n]+1;
+                    }
+                }
+                cintas[n] = cadenaAux;
+            }
+            estadoActual = transicionActual[k+1];
+            impresion = impresion + "(" + estadoActual;
+            for(int n = 0; n < cintas.length; n++){
+                cintasImpresion = cintas[n].substring(0, posicionesEnCintas[n]) + "*" + cintas[n].substring(n-1);
+                impresion = impresion + "," + cintasImpresion;
+            }
+            impresion = impresion + ")->";
+        }
+        if(F.contains(estadoActual)){
+            aprobacionCadena = true;
+            impresion = impresion + "aceptación";
+        }
+        else{
+            aprobacionCadena = false;
+            impresion = impresion + "rechazo";
+        }        
+    return impresion;
     }
     
     private void procesarListaCadenas(ArrayList<String> listaCadenas, String nombreArchivo, boolean imprimirPantalla){

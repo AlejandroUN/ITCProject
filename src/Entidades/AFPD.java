@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -15,6 +17,12 @@ public class AFPD extends AFP{
     private ArrayList<String[]> Delta;
     private Stack<String> stack;
     private String actualState;
+    
+    static Path currentRelativePath = Paths.get("");
+    static String wPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPD" + File.separator + "writeFolder";
+    static Path writePath = Paths.get(wPath);    
+    static String rPath = currentRelativePath.toAbsolutePath().toString() + File.separator + "Data" + File.separator + "AFPD" + File.separator + "readFolder";
+    static Path readPath = Paths.get(rPath); 
 
     public AFPD(ArrayList<String> Q, String q0, ArrayList<String> F, ArrayList<String> Sigma, ArrayList<String> Gamma, ArrayList<String[]> Delta) {
         super(Q, q0, F, Sigma, Gamma);
@@ -59,11 +67,11 @@ public class AFPD extends AFP{
     
     public void setAtributesByFile(String fileName) throws FileNotFoundException{
         boolean reader = false;
-        String name = fileName + ".dfa";
+        String name = fileName + ".dpda";
         String aux = "";
         String line = "";
         try {
-            BufferedReader rd = new BufferedReader(new FileReader(new File(name)));
+            BufferedReader rd =new BufferedReader(new FileReader(new File(rPath + File.separator + fileName)));            
             while(rd.readLine() != null){
                 line = rd.readLine();
                 if(contain(line, "#states")){
@@ -145,7 +153,7 @@ public class AFPD extends AFP{
         return true;
     }
 
-    private boolean procesarCadena(String cadena){
+    public boolean procesarCadena(String cadena){
         boolean temp = true;
         char[] aux = cadena.toCharArray();
         for(int i = 0; i < aux.length; i++){
@@ -185,7 +193,7 @@ public class AFPD extends AFP{
         return temp;
     }
 
-    private boolean procesarCadenaConDetalles(String str){
+    public boolean procesarCadenaConDetalles(String str){
         String impresion = "(" + q0 + "," + str + "," + printStack() + "->";
         boolean temp = true;
         char[] aux = str.toCharArray();
@@ -233,6 +241,55 @@ public class AFPD extends AFP{
         }
         System.out.println(impresion);
         return temp;
+    }
+    
+    public String procesarCadenaConDetallesString(String str){
+        String impresion = "(" + q0 + "," + str + "," + printStack() + "->";
+        boolean temp = true;
+        char[] aux = str.toCharArray();
+        for(int i = 0; i < aux.length; i++){
+            if(!Sigma.contains(String.valueOf(str.charAt(i)))) temp = false;
+        }
+        String parameter = "";
+        String operation = "";
+        String newState = "";
+        int i = 0;
+        String[] transition = null;
+        for(String[] j : Delta){
+            if(j[0].equals(q0) && j[1].equals(aux[0])){
+                transition = j;
+                break;
+            }
+        }
+        while(temp == true && i < aux.length){
+            impresion = impresion + "(" + q0 + "," + str.substring(i) + "," + printStack() + "->";
+            parameter = transition[2];
+            operation = transition[4];
+            if(modificarPila(stack, operation, parameter)){
+                actualState = transition[3];
+            }
+            else{
+                temp = false;
+            }
+            i++;
+            for(String[] j : Delta){
+                if(j[0].equals(actualState) && j[1].equals(aux[i])){
+                    transition = j;
+                    break;
+                }
+            }
+
+        }
+        if(!stack.isEmpty() || !F.contains(actualState)){
+            temp = false;
+        }
+        if(temp){
+            impresion = impresion + "accepted";
+        } 
+        else{
+            impresion = impresion + "rejected";
+        }        
+        return impresion;
     }
     
     private String printStack(){

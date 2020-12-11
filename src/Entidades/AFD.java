@@ -70,7 +70,7 @@ public class AFD extends AF {
     
     public boolean setAtributesGivenAFile(String nombreArchivo) {        
         boolean state = false;
-        String curSection = "WTF";
+        String curSection = "";
         String fileName = nombreArchivo + ".dfa";
         String curLine = "";                    
         try {                              

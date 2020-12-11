@@ -5,19 +5,24 @@
  */
 package Views.AFPDMain;
 
+import Entidades.AFD;
 import Entidades.AFPD;
 
 /**
  *
  * @author aleja
  */
-public class AFPDView extends javax.swing.JFrame {
+public class AFPDHallarProductoCartesianoconAFD extends javax.swing.JFrame {
 
+    AFPD afpd;
     /**
-     * Creates new form AFPDView
+     * Creates new form AFPDHallarProductoCartesianoconAFD
      */
-    public AFPDView() {
+    public AFPDHallarProductoCartesianoconAFD(AFPD afpd) {
         initComponents();
+        resultadoLabel.hide();
+        resultadoTextArea.hide();
+        this.afpd = afpd;
     }
 
     /**
@@ -33,12 +38,16 @@ public class AFPDView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         afdNameTf = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        comeBackButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        resultadoTextArea = new javax.swing.JTextArea();
+        resultadoLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("AFPD");
+        jLabel1.setText("AFPD hallar producto cartesiano con AFD");
 
-        jLabel2.setText("Por favor, ingrese el nombre del archivo que contiene los datos para inicializar el autómata");
+        jLabel2.setText("Por favor, ingrese el nombre del archivo que contiene los datos del AFPD");
 
         afdNameTf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -53,24 +62,48 @@ public class AFPDView extends javax.swing.JFrame {
             }
         });
 
+        comeBackButton.setText("Volver");
+        comeBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comeBackButtonActionPerformed(evt);
+            }
+        });
+
+        resultadoTextArea.setColumns(20);
+        resultadoTextArea.setRows(5);
+        jScrollPane1.setViewportView(resultadoTextArea);
+
+        resultadoLabel.setText("AFPD resultado del producto cartesiano:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(131, 131, 131))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comeBackButton)
+                        .addGap(27, 27, 27))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(233, 233, 233)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(91, 91, 91)
                         .addComponent(afdNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(resultadoLabel)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,7 +116,16 @@ public class AFPDView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(afdNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addContainerGap(176, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                .addComponent(resultadoLabel)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(comeBackButton)
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38))))
         );
 
         pack();
@@ -94,52 +136,28 @@ public class AFPDView extends javax.swing.JFrame {
     }//GEN-LAST:event_afdNameTfActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String afpdName = afdNameTf.getText();
-        AFPD afpd = new AFPD(afpdName);
+        String afdName = afdNameTf.getText();
+        AFD afd = new AFD(afdName);
+        resultadoTextArea.setText(afpd.hallarProductoCartesianoConAFD(afpd, afd).toString());
+        resultadoLabel.show();
+        resultadoTextArea.show();        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void comeBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comeBackButtonActionPerformed
         AFPDOptionsView afpdOptionsView = new AFPDOptionsView(afpd);
         afpdOptionsView.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_comeBackButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AFPDView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AFPDView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AFPDView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AFPDView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AFPDView().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField afdNameTf;
+    private javax.swing.JButton comeBackButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel resultadoLabel;
+    private javax.swing.JTextArea resultadoTextArea;
     // End of variables declaration//GEN-END:variables
 }
