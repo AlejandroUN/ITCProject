@@ -106,6 +106,7 @@ public class MTN extends MT{
         return cadena;
     }
     
+    @Override
     public void procesarListaCadenas(String[] listaCadenas, String nombreArchivo, boolean imprimirPantalla){
         File file = new File(nombreArchivo);
         try {
