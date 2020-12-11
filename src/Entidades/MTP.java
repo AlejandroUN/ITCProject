@@ -121,7 +121,7 @@ public class MTP extends AF {
         return false;
     }
 
-    public boolean procesarCadena(String cadena) {                              //no borrar
+    public boolean procesarCadena(String cadena) {
         return recorridoMTP(cadena, this.q0);
     }
 

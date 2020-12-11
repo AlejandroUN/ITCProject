@@ -23,6 +23,15 @@ public class AFPN extends AFP {
         setAtributesGivenAFile(nombreArchivo);
     }
 
+    public boolean verificarAlfabeto(String cadena) {
+        for (int i = 0; i < cadena.length(); i++) {
+            if (!this.Sigma.contains(String.valueOf(cadena.charAt(i)))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public TransitionAFPN getNextState(String estadoActual, char caracter) {
         int index = new Random().nextInt(this.Delta.size());
         TransitionAFPN transicion = this.Delta.get(index);
@@ -231,6 +240,61 @@ public class AFPN extends AFP {
             }
         }
         return false;
+    }
+
+    public String procesarCadenaConDetallesString(String cadena) {
+        String procesamiento = "";
+        ArrayList<ArrayList<String>> lista = new ArrayList<>();
+        for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+            recorridoAFPN(cadena, q0);
+            if (!lista.contains(recorridos)) {
+                lista.add(recorridos);
+            }
+            this.recorridos = new ArrayList<>();
+            this.stack = new Stack<>();
+        }
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).get(lista.get(i).size() - 1).equals("true")) {
+                System.out.print("Procesamiento " + (i + 1) + ": \t");
+                procesamiento += "Procesamiento " + (i + 1) + ": \t";
+                System.out.print(lista.get(i).get(0));
+                procesamiento += lista.get(i).get(0);
+                for (int j = 0; j < lista.get(i).size(); j++) {
+                    if (lista.get(i).get(j).equals("true")) {
+                        System.out.print(">>");
+                        procesamiento += ">>";
+                        lista.get(i).set(j, "acepted");
+                        System.out.println(lista.get(i).get(j));
+                        procesamiento += lista.get(i).get(j);
+                        return procesamiento;
+                    }
+                    System.out.print("->" + lista.get(i).get(j));
+                    procesamiento += "->" + lista.get(i).get(j);
+                }
+            }
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).get(lista.get(i).size() - 1).equals("false")) {
+                System.out.print("Procesamiento " + (i + 1) + ": \t");
+                procesamiento += "Procesamiento " + (i + 1) + ": \t";
+                System.out.print(lista.get(i).get(0));
+                procesamiento += lista.get(i).get(0);
+                for (int j = 0; j < lista.get(i).size(); j++) {
+                    if (lista.get(i).get(j).equals("false")) {
+                        System.out.print(">>");
+                        procesamiento += ">>";
+                        lista.get(i).set(j, "rejected");
+                        System.out.println(lista.get(i).get(j));
+                        procesamiento += lista.get(i).get(j);
+                        continue;
+                    }
+                    System.out.print("->" + lista.get(i).get(j));
+                    procesamiento += "->" + lista.get(i).get(j);
+                }
+            }
+        }
+        return procesamiento;
     }
 
     public int computarTodosLosProcesamientos(String cadena, String nombreArchivo) {
@@ -467,6 +531,120 @@ public class AFPN extends AFP {
         }
     }
 
+    public String procesarListaCadenasString(ArrayList<String> cadenas, String nombreArchivo) {
+        String procesamiento = "";
+        boolean flag = false;
+        for (String cadena : cadenas) {
+            System.out.print(cadena + "\t");
+            procesamiento += cadena + "\t";
+            ArrayList<ArrayList<String>> lista = new ArrayList<>();
+
+            ArrayList<ArrayList<String>> listaAceptacion = new ArrayList<>();
+            ArrayList<ArrayList<String>> listaRechazo = new ArrayList<>();
+
+            for (int i = 0; i < 50000 * cadena.length(); i++) {       //Funcion Probabilística
+                recorridoAFPN(cadena, q0);
+                if (!lista.contains(recorridos)) {
+                    lista.add(recorridos);
+                }
+                this.recorridos = new ArrayList<>();
+                this.stack = new Stack<>();
+            }
+
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 1; j < lista.get(i).size(); j++) {
+                    if (lista.get(i).get(j).equals("false") || lista.get(i).get(j).equals("true")) {
+                        if (lista.get(i).get(j).equals("false")) {
+                            lista.get(i).set(j, "rejected");
+                            listaRechazo.add(lista.get(i));
+                        } else if (lista.get(i).get(j).equals("true")) {
+                            lista.get(i).set(j, "acepted");
+                            listaAceptacion.add(lista.get(i));
+                        }
+                    }
+                }
+            }
+
+            if (!listaAceptacion.isEmpty()) {
+                flag = true;
+                for (int i = 0; i < listaAceptacion.size(); i++) {
+                    System.out.print(listaAceptacion.get(i).get(0));
+                    procesamiento += listaAceptacion.get(i).get(0);
+                    for (int j = 0; j < listaAceptacion.get(i).size(); j++) {
+                        if (listaAceptacion.get(i).get(j).equals("acepted")) {
+                            System.out.print(">>");
+                            procesamiento += ">>";
+                            System.out.print(listaAceptacion.get(i).get(j));
+                            procesamiento += listaAceptacion.get(i).get(j);
+                            break;
+                        }
+                        System.out.print("->" + listaAceptacion.get(i).get(j));
+                        procesamiento += "->" + listaAceptacion.get(i).get(j);
+                    }
+                    break;
+                }
+            } else {
+                for (int i = 0; i < listaRechazo.size(); i++) {
+                    System.out.print(listaRechazo.get(i).get(0));
+                    procesamiento += listaRechazo.get(i).get(0);
+                    for (int j = 0; j < listaRechazo.get(i).size(); j++) {
+                        if (listaRechazo.get(i).get(j).equals("rejected")) {
+                            System.out.print(">>");
+                            procesamiento += ">>";
+                            System.out.print(listaRechazo.get(i).get(j));
+                            procesamiento += listaRechazo.get(i).get(j);
+                            break;
+                        }
+                        System.out.print("->" + listaRechazo.get(i).get(j));
+                        procesamiento += "->" + listaRechazo.get(i).get(j);
+                    }
+                    break;
+                }
+            }
+            System.out.print("\t" + listaAceptacion.size() + "\t" + listaRechazo.size() + "\t");
+            procesamiento += "\t" + listaAceptacion.size() + "\t" + listaRechazo.size() + "\t";
+            if (flag) {
+                System.out.print("yes");
+                procesamiento += "yes";
+            } else {
+                System.out.print("no");
+                procesamiento += "no";
+            }
+            System.out.println();
+            procesamiento += "\n";
+        }
+        return procesamiento;
+    }
+
+    public AFPN hallarProductoCartesianoConAFD(AFD afd) {
+        ArrayList<String> estados = new ArrayList<>();
+        String estadoInicial = "";
+        ArrayList<String> estadosFinales = new ArrayList<>();
+        ArrayList<TransitionAFPN> transcisiones = new ArrayList<>();
+
+        for (TransitionAFD DeltaAFD : afd.Delta) {
+            for (TransitionAFPN DeltaAFPN : this.Delta) {
+                if (DeltaAFD.getSymbol().equals(DeltaAFPN.getCharacter())) {
+                    estados.add("(" + DeltaAFPN.getQ0() + "," + DeltaAFD.getInitialState() + ")");
+                    estados.add("(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getNextState() + ")");
+                    transcisiones.add(new TransitionAFPN("(" + DeltaAFPN.getQ0() + "," + DeltaAFD.getInitialState() + ")", DeltaAFPN.getCharacter(), DeltaAFPN.getPilaIn(), "(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getNextState() + ")", DeltaAFPN.getPilaOut()));
+                    if (afd.F.contains(DeltaAFD.getNextState()) && this.F.contains(DeltaAFPN.getFinalStates()) && !estadosFinales.contains("(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getNextState() + ")")) {
+                        estadosFinales.add("(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getNextState() + ")");
+                    }
+                } else if (String.valueOf(DeltaAFPN.getCharacter()).equals("$")) {
+                    estados.add("(" + DeltaAFPN.getQ0() + "," + DeltaAFD.getInitialState() + ")");
+                    estados.add("(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getInitialState() + ")");
+                    transcisiones.add(new TransitionAFPN("(" + DeltaAFPN.getQ0() + "," + DeltaAFD.getInitialState() + ")", DeltaAFPN.getCharacter(), DeltaAFPN.getPilaIn(), "(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getInitialState() + ")", DeltaAFPN.getPilaOut()));
+                    if (afd.F.contains(DeltaAFD.getNextState()) && this.F.contains(DeltaAFPN.getFinalStates()) && !estadosFinales.contains("(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getNextState() + ")")) {
+                        estadosFinales.add("(" + DeltaAFPN.getFinalStates() + "," + DeltaAFD.getNextState() + ")");
+                    }
+                }
+            }
+        }
+        //          (Estados,estado Inicial, estados Aceptacion, Alfabeto, Alfabeto Pila, Transiciones)
+        return new AFPN(estados, estadoInicial, estadosFinales, Sigma, Gamma, transcisiones); //Modificar
+    }
+
     public ArrayList<TransitionAFPN> getDelta() {
         return Delta;
     }
@@ -521,14 +699,6 @@ public class AFPN extends AFP {
         this.Q = Q;
     }
 
-    public String getQ0() {
-        return q0;
-    }
-
-    public void setQ0(String q0) {
-        this.q0 = q0;
-    }
-
     @Override
     public ArrayList<String> getF() {
         return F;
@@ -537,6 +707,14 @@ public class AFPN extends AFP {
     @Override
     public void setF(ArrayList<String> F) {
         this.F = F;
+    }
+
+    public String getQ0() {
+        return q0;
+    }
+
+    public void setQ0(String q0) {
+        this.q0 = q0;
     }
 
     @Override
