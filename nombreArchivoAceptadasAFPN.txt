@@ -1,3 +1,0 @@
-Cadena: abab
-Procesamiento 1: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,$)->(q0,b,A)->(q0,$,$)>>acepted
-Procesamiento 2: 	(q0,abab,$)->(q0,abab,$)->(q0,bab,A)->(q0,ab,BA)->(q0,b,A)->(q0,$,$)>>acepted
